@@ -30,8 +30,8 @@ func downgradeAppToVersion(appId: String, versionId: String, ipaTool: IPATool) {
     let path = ipaTool.downloadIPAForVersion(appId: appId, appVerId: versionId)
     print("IPA downloaded to \(path)")
     
-    let tempDir = FileManager.default.temporaryDirectory
-    var contents = try! FileManager.default.contentsOfDirectory(atPath: path)
+    let tempDir = fm.temporaryDirectory
+    let contents = try! fm.contentsOfDirectory(atPath: path)
     print("Contents: \(contents)")
     // also delete this; i wanna see both the app's directory and the temp ipa GONE.
     let destinationUrl = tempDir.appendingPathComponent("app.ipa")
@@ -39,7 +39,7 @@ func downgradeAppToVersion(appId: String, versionId: String, ipaTool: IPATool) {
     print("IPA zipped to \(destinationUrl)")
     let path2 = URL(fileURLWithPath: path)
     var appDir = path2.appendingPathComponent("Payload")
-    for file in try! FileManager.default.contentsOfDirectory(atPath: appDir.path) {
+    for file in try! fm.contentsOfDirectory(atPath: appDir.path) {
         if file.hasSuffix(".app") {
             print("Found app: \(file)")
             // i assume we delete this? idk how to though
@@ -176,15 +176,15 @@ func downgradeApp(appId: String, ipaTool: IPATool) -> Bool {
 func cleanUp() {
     do {
         // first, delete the temporary ipa file.
-        let tempDir = FileManager.default.temporaryDirectory
+        let tempDir = fm.temporaryDirectory
         let tempIPA = tempDir.appendingPathComponent("app.ipa")
         
-        try FileManager.default.removeItem(at: tempIPA)
+        try fm.removeItem(at: tempIPA)
         // then, nuke the app directory.
-        let docsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let docsURL = fm.urls(for: .documentDirectory, in: .userDomainMask).first!
         let appFolder = docsURL.appendingPathComponent("app")
         
-        try FileManager.default.removeItem(at: appFolder)
+        try fm.removeItem(at: appFolder)
     } catch {
         
     }

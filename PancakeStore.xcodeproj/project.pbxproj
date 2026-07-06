@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		155F6D562F14A65C00A05FA9 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 155F6D552F14A65C00A05FA9 /* MobileCoreServices.framework */; };
-		155F6DF22F14AF3F00A05FA9 /* DeviceKit in Frameworks */ = {isa = PBXBuildFile; productRef = 155F6DF12F14AF3F00A05FA9 /* DeviceKit */; };
 		1561ED532F9F01DF008BEC23 /* MapleSyrup.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1561ED492F9F01DE008BEC23 /* MapleSyrup.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		159F052C2FF8654D00AE1D06 /* PartyUI in Frameworks */ = {isa = PBXBuildFile; productRef = 159F052B2FF8654D00AE1D06 /* PartyUI */; };
 		6FA2A8FF2D2426F2005CF73D /* Telegraph in Frameworks */ = {isa = PBXBuildFile; productRef = 6FA2A8FE2D2426F2005CF73D /* Telegraph */; };
@@ -84,7 +83,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				155F6DF22F14AF3F00A05FA9 /* DeviceKit in Frameworks */,
 				155F6D562F14A65C00A05FA9 /* MobileCoreServices.framework in Frameworks */,
 				159F052C2FF8654D00AE1D06 /* PartyUI in Frameworks */,
 				6FA2A9022D2426F9005CF73D /* Zip in Frameworks */,
@@ -169,7 +167,6 @@
 			packageProductDependencies = (
 				6FA2A8FE2D2426F2005CF73D /* Telegraph */,
 				6FA2A9012D2426F9005CF73D /* Zip */,
-				155F6DF12F14AF3F00A05FA9 /* DeviceKit */,
 				159F052B2FF8654D00AE1D06 /* PartyUI */,
 			);
 			productName = MuffinStoreJailed;
@@ -206,7 +203,6 @@
 			packageReferences = (
 				6FA2A8FD2D2426F2005CF73D /* XCRemoteSwiftPackageReference "Telegraph" */,
 				6FA2A9002D2426F9005CF73D /* XCRemoteSwiftPackageReference "Zip" */,
-				155F6DF02F14AF3F00A05FA9 /* XCRemoteSwiftPackageReference "DeviceKit" */,
 				159F052A2FF8654D00AE1D06 /* XCRemoteSwiftPackageReference "PartyUI" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -446,14 +442,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = PancakeStore;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "Beta 2";
+				CURRENT_PROJECT_VERSION = "Beta 1";
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "PancakeStore-Info.plist";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "To securely store your Apple ID authentication information, biometric authentication is required.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -465,7 +460,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jbdotparty.PancakeStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -485,14 +480,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = PancakeStore;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = "Beta 2";
+				CURRENT_PROJECT_VERSION = "Beta 1";
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "PancakeStore-Info.plist";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "To securely store your Apple ID authentication information, biometric authentication is required.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -504,7 +498,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jbdotparty.PancakeStore;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -551,14 +545,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		155F6DF02F14AF3F00A05FA9 /* XCRemoteSwiftPackageReference "DeviceKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/devicekit/DeviceKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.7.0;
-			};
-		};
 		159F052A2FF8654D00AE1D06 /* XCRemoteSwiftPackageReference "PartyUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jailbreakdotparty/PartyUI";
@@ -586,11 +572,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		155F6DF12F14AF3F00A05FA9 /* DeviceKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 155F6DF02F14AF3F00A05FA9 /* XCRemoteSwiftPackageReference "DeviceKit" */;
-			productName = DeviceKit;
-		};
 		159F052B2FF8654D00AE1D06 /* PartyUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 159F052A2FF8654D00AE1D06 /* XCRemoteSwiftPackageReference "PartyUI" */;

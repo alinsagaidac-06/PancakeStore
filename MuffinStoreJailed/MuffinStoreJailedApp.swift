@@ -11,6 +11,7 @@ import UniformTypeIdentifiers
 var pipe = Pipe()
 var sema = DispatchSemaphore(value: 0)
 var weOnADebugBuild: Bool = false
+let fm = FileManager.default
 
 @main
 struct MuffinStoreJailedApp: App {
@@ -41,3 +42,11 @@ struct MuffinStoreJailedApp: App {
 
 // make string compatiable with errors
 extension String: @retroactive Error {}
+
+extension FileManager {
+    func createDirectoryIfNeeded(at url: URL) throws {
+        if !self.fileExists(atPath: url.path) {
+            try self.createDirectory(at: url, withIntermediateDirectories: true)
+        }
+    }
+}

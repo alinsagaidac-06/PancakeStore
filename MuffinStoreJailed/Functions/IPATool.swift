@@ -402,7 +402,6 @@ class IPATool {
         let downInfo = songList[0]
         let url = downInfo["URL"] as! String
         print("Got download URL: \(url)")
-        let fm = FileManager.default
         let tempDir = fm.temporaryDirectory
         let path = tempDir.appendingPathComponent("app.ipa").path
         if fm.fileExists(atPath: path) {
@@ -506,7 +505,6 @@ class EncryptedKeychainWrapper {
     }
 
     static func saveAuthInfo(base64: String) -> Void {
-        let fm = FileManager.default
         let query: [String: Any] = [
             kSecClass as String: kSecClassKey,
             kSecAttrApplicationTag as String: "com.jbdotparty.PancakeStore.key",
@@ -538,7 +536,6 @@ class EncryptedKeychainWrapper {
     static func loadAuthInfo() -> String? {
         //@ObservedObject var store = StoreData.shared
         
-        let fm = FileManager.default
         let path = fm.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("authinfo").path
         if !fm.fileExists(atPath: path) {
             return nil
@@ -571,7 +568,6 @@ class EncryptedKeychainWrapper {
     }
 
     static func deleteAuthInfo() -> Void {
-        let fm = FileManager.default
         let path = fm.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("authinfo").path
         try! fm.removeItem(atPath: path)
     }

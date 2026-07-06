@@ -34,10 +34,6 @@ struct LogView: View {
                             }
                         }
                     }
-                    // Redirect
-                    // print("Redirecting stdout")
-                    setvbuf(stdout, nil, _IONBF, 0)
-                    dup2(pipe.fileHandleForWriting.fileDescriptor, STDOUT_FILENO)
                 }
                 .contextMenu {
                     Button {
@@ -53,7 +49,9 @@ struct LogView: View {
                             formatter.dateFormat = "MM-dd-yyyy-HHmmss"
                             let date = formatter.string(from: Date())
                             
-                            let tempURL = URL.temporaryDirectory.appendingPathComponent("PancakeStore-Log-\(date)").appendingPathExtension("txt")
+                            let logsDirURL = URL.documentsDirectory.appendingPathComponent("Logs/")
+                            try? fm.createDirectoryIfNeeded(at: logsDirURL)
+                            let tempURL = logsDirURL.appendingPathComponent("PancakeStore-Log-\(date)").appendingPathExtension("txt")
                             guard let data = log.data(using: .utf8) else {
                                 throw "failed to create data from log string"
                             }

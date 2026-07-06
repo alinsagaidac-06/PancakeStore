@@ -19,7 +19,7 @@ struct SettingsView: View {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 10) {
-                        AppInfoCell(build: "Release")
+                        AppInfoCell(build: "Beta 1")
                         HStack {
                             Button {
                                 openURL(URL(string: "https://jailbreak.party/discord")!)
@@ -61,9 +61,9 @@ struct SettingsView: View {
                 }
                 
                 Section {
-                    LinkCreditCell(image: Image("mineek"), name: "mineek", description: "Original creator of MuffinStore Jailed.", url: "https://github.com/mineek")
+                    LinkCreditCell(image: Image("mineek"), name: "mineek", description: "Original developer of MuffinStore Jailed.", url: "https://github.com/mineek")
                     LinkCreditCell(image: Image("lunginspector"), name: "lunginspector", description: "Obiliterated the frontend multiple times. Also did some backend fixes.", url: "https://github.com/lunginspector")
-                    LinkCreditCell(image: Image("skadz"), name: "Skadz", description: "Fixed the entire authentication system thrice.", url: "https://github.com/skadz108")
+                    LinkCreditCell(image: Image("skadz"), name: "Skadz", description: "Three-time authentication fixer, backend work, and project maintainer.", url: "https://github.com/skadz108")
                 } header: {
                     HeaderLabel(text: "Credits", icon: "star")
                 }

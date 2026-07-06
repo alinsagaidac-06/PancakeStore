@@ -25,6 +25,7 @@ struct ContentView: View {
     @State private var appleId = ""
     @State private var password = ""
     @State private var authCode = ""
+    @State private var accountName = ""
     
     @State private var storeURL = ""
     @State private var isDowngrading = false
@@ -57,6 +58,8 @@ struct ContentView: View {
                             .textInputAutocapitalization(.never)
                     } header: {
                         HeaderLabel(text: "Log In", icon: "cloud")
+                    } footer: {
+                        Text("If you are having issues logging in, please [see here](https://jailbreak.party/pancakestore/authentication).")
                     }
                     
                     if store.sent2FA {
@@ -211,10 +214,16 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Menu {
-                        Button {
-                            LSApplicationWorkspace().openApplication(withBundleID: "com.apple.AppStore")
-                        } label: {
-                            Label("Open App Store", systemImage: "bag")
+                        if store.isLoggedIn {
+                            Button(action: {}) {
+                                Text("Signed in as \(accountName)")
+                                Text("\(appleId)")
+                            }
+                        } else {
+                            Button(action: {}) {
+                                Text("Not signed in")
+                                Text("Sign in to downgrade apps.")
+                            }
                         }
                         
                         Button(role: .destructive) {
@@ -230,7 +239,7 @@ struct ContentView: View {
                         }
                         .disabled(!store.isLoggedIn)
                     } label: {
-                        Image(systemName: "ellipsis")
+                        Image(systemName: "person")
                     }
                 }
                 
@@ -246,7 +255,8 @@ struct ContentView: View {
                 SettingsView()
             }
             .onAppear {
-                print("\n=== PancakeStore v\(AppInfo.appVersion) (Release) ===")
+                print("\n[*] PancakeStore v\(AppInfo.appVersion) (Beta 1)")
+                print("[*] Running on \(device.systemName) \(device.systemVersion), \(machineName()).")
                 store.isLoggedIn = EncryptedKeychainWrapper.hasAuthInfo()
                 print("Found \(store.isLoggedIn ? "auth" : "no auth") info in keychain")
                 
@@ -261,6 +271,7 @@ struct ContentView: View {
                     
                     appleId = authInfo["appleId"]! as! String
                     password = authInfo["password"]! as! String
+                    accountName = authInfo["accountName"]! as! String
                     
                     ipaTool = IPATool(appleId: appleId, password: password)
                     let result = ipaTool?.authenticate()
@@ -268,14 +279,6 @@ struct ContentView: View {
                 } else {
                     print("No auth info found in keychain, setting up by generating a key in SEP")
                     EncryptedKeychainWrapper.generateAndStoreKey()
-                }
-                
-                print("[*] Welcome to PancakeStore! Running on \(device.systemName) \(device.systemVersion), \(machineName()).")
-                
-                if !store.isLoggedIn {
-                    print("[!] Logging in may break at random due to Apple's constant server-side changes. If login fails, make sure that you're on the latest version of PancakeStore.")
-                } else {
-                    print("[*] Copy an app store link into the field below to downgrade. Do NOT ask for support if a specific app can't be downgraded or crashes on launch. There is nothing we can do about this.")
                 }
             }
             .onOpenURL { schemedURL in
