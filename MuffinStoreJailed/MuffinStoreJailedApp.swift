@@ -16,7 +16,8 @@ let fm = FileManager.default
 @main
 struct MuffinStoreJailedApp: App {
     @AppStorage("autoCleanApp") var autoCleanApp: Bool = true
-    
+    @AppStorage(AppLanguage.storageKey) private var languageCode: String = AppLanguage.english.rawValue
+
     init() {
         // Setup log stuff (redirect stdout)
         setvbuf(stdout, nil, _IONBF, 0)
@@ -27,14 +28,19 @@ struct MuffinStoreJailedApp: App {
         weOnADebugBuild = false
         #endif
     }
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(\.locale, Locale(identifier: languageCode))
                 .onAppear {
+                    Localization.setLanguage(AppLanguage(rawValue: languageCode) ?? .english)
                     if autoCleanApp {
                         cleanUp()
                     }
+                }
+                .onChange(of: languageCode) { newValue in
+                    Localization.setLanguage(AppLanguage(rawValue: newValue) ?? .english)
                 }
         }
     }
