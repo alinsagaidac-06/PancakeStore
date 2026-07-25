@@ -13,26 +13,25 @@ struct SettingsView: View {
     @Environment(\.openURL) private var openURL
     
     @AppStorage("autoCleanApp") var autoCleanApp: Bool = true
-    @AppStorage(AppLanguage.storageKey) private var languageCode: String = AppLanguage.english.rawValue
 
     var body: some View {
         NavigationStack {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 10) {
-                        AppInfoCell(build: "Beta 1")
+                        AppInfoCell(build: "Beta 2")
                         HStack {
                             Button {
                                 openURL(URL(string: "https://jailbreak.party/discord")!)
                             } label: {
-                                ButtonLabel(text: Localization.string("action.discord"), icon: "discord", useImage: true)
+                                ButtonLabel(text: String(localized: "action.discord"), icon: "discord", useImage: true)
                             }
                             .buttonStyle(TranslucentButtonStyle(color: .discord))
 
                             Button {
                                 openURL(URL(string: "https://github.com/jailbreakdotparty/PancakeStore")!)
                             } label: {
-                                ButtonLabel(text: Localization.string("action.github"), icon: "github", useImage: true)
+                                ButtonLabel(text: String(localized: "action.github"), icon: "github", useImage: true)
                             }
                             .buttonStyle(TranslucentButtonStyle(color: .github))
                         }
@@ -40,12 +39,12 @@ struct SettingsView: View {
                         Button {
                             openURL(URL(string: "https://jailbreak.party/")!)
                         } label: {
-                            ButtonLabel(text: Localization.string("action.website"), icon: "globe")
+                            ButtonLabel(text: String(localized: "action.website"), icon: "globe")
                         }
                         .buttonStyle(TranslucentButtonStyle())
                     }
                 } header: {
-                    HeaderLabel(text: Localization.string("section.about.title"), icon: "info.circle")
+                    HeaderLabel(text: String(localized: "section.about.title"), icon: "info.circle")
                 }
 
                 Section {
@@ -58,37 +57,16 @@ struct SettingsView: View {
                         cleanUp()
                     }
                 } header: {
-                    HeaderLabel(text: Localization.string("section.data.title"), icon: "loupe")
+                    HeaderLabel(text: String(localized: "section.data.title"), icon: "loupe")
                 }
 
                 Section {
-                    VStack(spacing: 12) {
-                        ForEach(AppLanguage.allCases) { language in
-                            Button {
-                                select(language)
-                            } label: {
-                                HStack {
-                                    Text(language.displayNameKey)
-                                    Spacer()
-                                    if language.rawValue == languageCode {
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .foregroundStyle(.tint)
-                                    }
-                                }
-                            }
-                            .buttonStyle(TranslucentButtonStyle())
-                        }
-                    }
+                    LinkCreditCell(image: Image("mineek"), name: "mineek", description: String(localized: "credits.mineek"), url: "https://github.com/mineek")
+                    LinkCreditCell(image: Image("lunginspector"), name: "lunginspector", description: String(localized: "credits.lunginspector"), url: "https://github.com/lunginspector")
+                    LinkCreditCell(image: Image("skadz"), name: "Skadz", description: String(localized: "credits.skadz"), url: "https://github.com/skadz108")
+                    LinkCreditCell(image: Image("gerda"), name: "gerda", description: String(localized: "credits.localizations.gerda"), url: "https://github.com/ezn1hero")
                 } header: {
-                    HeaderLabel(text: Localization.string("section.language.title"), icon: "globe")
-                }
-
-                Section {
-                    LinkCreditCell(image: Image("mineek"), name: "mineek", description: Localization.string("credits.mineek"), url: "https://github.com/mineek")
-                    LinkCreditCell(image: Image("lunginspector"), name: "lunginspector", description: Localization.string("credits.lunginspector"), url: "https://github.com/lunginspector")
-                    LinkCreditCell(image: Image("skadz"), name: "Skadz", description: Localization.string("credits.skadz"), url: "https://github.com/skadz108")
-                } header: {
-                    HeaderLabel(text: Localization.string("section.credits.title"), icon: "star")
+                    HeaderLabel(text: String(localized: "section.credits.title"), icon: "star")
                 }
             }
             .navigationTitle("settings.title")
@@ -102,13 +80,5 @@ struct SettingsView: View {
                 }
             }
         }
-    }
-}
-
-private extension SettingsView {
-    func select(_ language: AppLanguage) {
-        Haptic.shared.play(.soft)
-        languageCode = language.rawValue
-        Localization.setLanguage(language)
     }
 }

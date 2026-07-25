@@ -47,6 +47,7 @@
 "credits.mineek" = "Original developer of MuffinStore Jailed.";
 "credits.lunginspector" = "Obliterated the frontend multiple times. Also did some backend fixes.";
 "credits.skadz" = "Three-time authentication fixer, backend work, and project maintainer.";
+"credits.localizations.gerda" = "Russian localization.";
 "settings.title" = "Settings";
 "section.language.title" = "Language";
 "language.english" = "English";

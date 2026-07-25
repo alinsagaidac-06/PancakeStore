@@ -176,6 +176,57 @@ class StoreClient {
             "rmp": "0",
             "why": "signIn"
         ]
+        
+        // bunch of clauded bullshit, idea skidded from ipatool issue #513
+        // since this is the same time we're adding the russian localization, and we already have the "brazil fix":
+        // i title this one, "russia fix"
+        // Skadz 7.25.26
+        func attemptGetPod(url: URL, completion: @escaping (Bool, Data?, HTTPURLResponse?) -> Void) {
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.allHTTPHeaderFields = [
+                "Accept": "*/*",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "User-Agent": "Configurator/2.17 (Macintosh; OS X 15.2; 24C5089c) AppleWebKit/0620.1.16.11.6"
+            ]
+            request.httpBody = try! JSONSerialization.data(withJSONObject: req, options: [])
+
+            let dataTask = session.dataTask(with: request) { [weak self] data, response, error in
+                guard let self = self else { return }
+
+                if let error = error {
+                    print("error \(error.localizedDescription)")
+                    completion(false, nil, nil)
+                    return
+                }
+
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    completion(false, nil, nil)
+                    return
+                }
+
+//                print("requested from \(url.absoluteString)")
+                print("Status: \(httpResponse.statusCode)")
+                let newURL = httpResponse.url ?? url
+                print("New URL: \(newURL)")
+
+                if let pod = httpResponse.value(forHTTPHeaderField: "pod") {
+                    print("pod gotten: \(pod)")
+                    self.pod = pod
+                    completion(true, data, httpResponse)
+                } else {
+                    if newURL == url {
+                        print("sent to iTunes purgatory :(")
+                        completion(false, data, httpResponse)
+                        return
+                    }
+                    print("failed to get pod, retrying with new url: \(newURL)")
+                    attemptGetPod(url: newURL, completion: completion)
+                }
+            }
+            dataTask.resume()
+        }
+        
         Task {
             let authURL = await getBagEndpoint()
             
@@ -186,89 +237,56 @@ class StoreClient {
                 url = URL(string: urlString.appending("/"))!
             }
             
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.allHTTPHeaderFields = [
-                "Accept": "*/*",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "User-Agent": "Configurator/2.17 (Macintosh; OS X 15.2; 24C5089c) AppleWebKit/0620.1.16.11.6"
-            ]
-            
             var ret = false
             
-            for attempt in 1...4 {
-                req["attempt"] = String(attempt)
-                request.httpBody = try! JSONSerialization.data(withJSONObject: req, options: [])
-                let datatask = session.dataTask(with: request) { (data, response, error) in
-                    if let error = error {
-                        print("error 1 \(error.localizedDescription)")
-                        return
-                    }
-                    if let response = response {
-                        if let response = response as? HTTPURLResponse {
-                            print("Status: \(response.statusCode)")
-                            print("New URL: \(response.url!)")
-                            request.url = response.url
-                            
-                            if let pod = response.value(forHTTPHeaderField: "pod") {
-                                print("pod gotten: \(pod)")
-                                self.pod = pod
-                            } else {
-                                print("failed to get pod!! this either means that you need to get a 2fa code or that you can't log in with this apple id.")
-                            }
-                        }
-                    }
-                    
-                    if let data = data {
-                        do {
-//                            print("Data: \(String(data: data, encoding: .utf8))")
-                            let resp = try PropertyListSerialization.propertyList(from: data, options: [], format: nil) as! [String: Any]
-                            if let dsPersonId = resp["dsPersonId"] as? String, let passwordToken = resp["passwordToken"] as? String, !dsPersonId.isEmpty, !passwordToken.isEmpty {
-                                print("Authentication successful!")
-                                let download_queue_info = resp["download-queue-info"] as! [String: Any]
-                                let dsid = download_queue_info["dsid"] as! Int
-                                let httpResp = response as! HTTPURLResponse
-                                let storeFront = httpResp.value(forHTTPHeaderField: "x-set-apple-store-front")
-                                print("Store front: \(storeFront!)")
-                                self.authHeaders = [
-                                    "X-Dsid": String(dsid),
-                                    "iCloud-Dsid": String(dsid),
-                                    "X-Apple-Store-Front": storeFront!,
-                                    "X-Token": resp["passwordToken"] as! String
-                                ]
-                                self.authCookies = self.session.configuration.httpCookieStorage?.cookies
-                                let accountInfo = resp["accountInfo"] as! [String: Any]
-                                let address = accountInfo["address"] as! [String: String]
-                                self.accountName = address["firstName"]! + " " + address["lastName"]!
-                                self.saveAuthInfo()
-                                ret = true
-                                store.isLoggedIn = true
-                            } else if (resp["customerMessage"] as! String).contains("Configurator_message") {
-                                store.sent2FA = true
-                                print("need 2fa...")
-                                ret = false
-                            } else {
-                                let errorMessage = resp["customerMessage"] as! String
-                                print("Authentication failed: \(errorMessage)")
-                                DispatchQueue.main.async {
-                                    Alertinator.shared.alert(
-                                        title: Localization.string("alert.login.failed.title"),
-                                        body: Localization.string("alert.login.failed.message", arguments: errorMessage)
-                                    )
-                                }
-                            }
-                        } catch {
-                            print("Error: \(error)")
-                        }
-                    }
-                }
-                datatask.resume()
-                if ret {
-                    break
-                }
-                if requestCode {
+            attemptGetPod(url: url) { success, data, response in
+                if !success {
+                    print("failed to get pod!! this either means that you need to get a 2fa code or that you can't log in with this apple id.")
                     ret = false
-                    break
+                }
+
+                if let data = data {
+                    do {
+                        let resp = try PropertyListSerialization.propertyList(from: data, options: [], format: nil) as! [String: Any]
+                        if let dsPersonId = resp["dsPersonId"] as? String, let passwordToken = resp["passwordToken"] as? String, !dsPersonId.isEmpty, !passwordToken.isEmpty {
+                            print("Authentication successful!")
+                            let download_queue_info = resp["download-queue-info"] as! [String: Any]
+                            let dsid = download_queue_info["dsid"] as! Int
+                            let storeFront = response?.value(forHTTPHeaderField: "x-set-apple-store-front")
+                            print("Store front: \(storeFront!)")
+                            self.authHeaders = [
+                                "X-Dsid": String(dsid),
+                                "iCloud-Dsid": String(dsid),
+                                "X-Apple-Store-Front": storeFront!,
+                                "X-Token": resp["passwordToken"] as! String
+                            ]
+                            self.authCookies = self.session.configuration.httpCookieStorage?.cookies
+                            let accountInfo = resp["accountInfo"] as! [String: Any]
+                            let address = accountInfo["address"] as! [String: String]
+                            self.accountName = address["firstName"]! + " " + address["lastName"]!
+                            self.saveAuthInfo()
+                            ret = true
+                            store.isLoggedIn = true
+                        } else if (resp["customerMessage"] as! String).contains("Configurator_message") {
+                            store.sent2FA = true
+                            print("need 2fa...")
+                            ret = false
+                        } else {
+                            let errorMessage = resp["customerMessage"] as! String
+                            print("Authentication failed: \(errorMessage)")
+                            DispatchQueue.main.async {
+                                let format = String(localized: "alert.login.failed.message")
+                                let message = String(format: format, errorMessage)
+                                
+                                Alertinator.shared.alert(
+                                    title: String(localized: "alert.login.failed.title"),
+                                    body: message
+                                )
+                            }
+                        }
+                    } catch {
+                        print("Error: \(error)")
+                    }
                 }
             }
             return ret

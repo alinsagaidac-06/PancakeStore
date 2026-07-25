@@ -42,7 +42,7 @@ struct ContentView: View {
                     LogView()
                         .modifier(TerminalPlatter())
                 } header: {
-                    HeaderLabel(text: Localization.string("section.logs.title"), icon: "terminal")
+                    HeaderLabel(text: String(localized: "section.logs.title"), icon: "terminal")
                 } footer: {
                     Text("section.logs.footer")
                 }
@@ -57,7 +57,7 @@ struct ContentView: View {
                             .autocorrectionDisabled()
                             .textInputAutocapitalization(.never)
                     } header: {
-                        HeaderLabel(text: Localization.string("section.login.title"), icon: "cloud")
+                        HeaderLabel(text: String(localized: "section.login.title"), icon: "cloud")
                     } footer: {
                         Text("section.login.footer")
                     }
@@ -69,7 +69,7 @@ struct ContentView: View {
                                 .autocorrectionDisabled()
                                 .textInputAutocapitalization(.never)
                         } header: {
-                            HeaderLabel(text: Localization.string("section.verification.title"), icon: "faceid")
+                            HeaderLabel(text: String(localized: "section.verification.title"), icon: "faceid")
                         }
                     }
                 }
@@ -81,7 +81,7 @@ struct ContentView: View {
                             .autocorrectionDisabled()
                             .textInputAutocapitalization(.never)
                     } header: {
-                        HeaderLabel(text: Localization.string("section.downgrade.title"), icon: "arrow.down.app")
+                        HeaderLabel(text: String(localized: "section.downgrade.title"), icon: "arrow.down.app")
                     } footer: {
                         Text("section.downgrade.footer")
                     }
@@ -94,12 +94,12 @@ struct ContentView: View {
                             HStack(spacing: 12) {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundStyle(.green)
-                                Text(Localization.string("status.downgradeSuccessful"))
+                                Text("status.downgradeSuccessful")
                             }
                         } else {
                             HStack(spacing: 12) {
                                 ProgressView()
-                                Text(Localization.string("status.downgrading"))
+                                Text("status.downgrading")
                             }
                         }
                     }
@@ -114,7 +114,7 @@ struct ContentView: View {
                                         Button {
                                             UIPasteboard.general.string = storeURL
                                         } label: {
-                                            Label(Localization.string("action.copy"), systemImage: "doc.on.doc")
+                                            Label("action.copy", systemImage: "doc.on.doc")
                                         }
                                     }
                             }
@@ -129,7 +129,7 @@ struct ContentView: View {
                                         Button {
                                             UIPasteboard.general.string = store.appBID
                                         } label: {
-                                            Label(Localization.string("action.copy"), systemImage: "doc.on.doc")
+                                            Label("action.copy", systemImage: "doc.on.doc")
                                         }
                                     }
                             }
@@ -143,7 +143,7 @@ struct ContentView: View {
                             }
                         }
                     } header: {
-                        HeaderLabel(text: Localization.string("section.appInfo.title"), icon: "info.circle")
+                        HeaderLabel(text: String(localized: "section.appInfo.title"), icon: "info.circle")
                     }
                 }
             }
@@ -156,7 +156,7 @@ struct ContentView: View {
                             ipaTool = IPATool(appleId: appleId, password: password)
                             let _ = ipaTool?.authenticate(requestCode: true)
                         } label: {
-                            ButtonLabel(text: Localization.string("action.continue"), icon: "arrow.right")
+                            ButtonLabel(text: String(localized: "action.continue"), icon: "arrow.right")
                         }
                         .buttonStyle(FancyButtonStyle())
                         .disabled(appleId.isEmpty || password.isEmpty)
@@ -168,7 +168,7 @@ struct ContentView: View {
                             ipaTool = IPATool(appleId: appleId, password: finalPassword)
                             let _ = ipaTool?.authenticate()
                         } label: {
-                            ButtonLabel(text: Localization.string("action.logIn"), icon: "arrow.right")
+                            ButtonLabel(text: String(localized: "action.logIn"), icon: "arrow.right")
                         }
                         .buttonStyle(FancyButtonStyle())
                         .disabled(authCode.isEmpty)
@@ -191,7 +191,7 @@ struct ContentView: View {
                             
                             isDowngrading = downgradeApp(appId: appLinkParsed, ipaTool: ipaTool!)
                         } label: {
-                            ButtonLabel(text: Localization.string("action.downgradeApp"), icon: "arrow.down")
+                            ButtonLabel(text: String(localized: "action.downgradeApp"), icon: "arrow.down")
                         }
                         .buttonStyle(FancyButtonStyle())
                         .disabled(storeURL.isEmpty)
@@ -202,7 +202,7 @@ struct ContentView: View {
                             Button {
                                 LSApplicationWorkspace.default().openApplication(withBundleID: store.appBID)
                             } label: {
-                                ButtonLabel(text: Localization.string("action.openApp"), icon: "arrow.up.right.square")
+                                ButtonLabel(text: String(localized: "action.openApp"), icon: "arrow.up.right.square")
                             }
                             .buttonStyle(FancyButtonStyle())
                             .disabled(!store.hasServedApp)
@@ -216,7 +216,7 @@ struct ContentView: View {
                     Menu {
                         if store.isLoggedIn {
                             Button(action: {}) {
-                                Text(Localization.string("menu.signedInAs", arguments: accountName))
+                                Text(verbatim: String(format: String(localized: "menu.signedInAs"), accountName))
                                 Text("\(appleId)")
                             }
                         } else {
@@ -228,9 +228,9 @@ struct ContentView: View {
 
                         Button(role: .destructive) {
                             Alertinator.shared.alert(
-                                title: Localization.string("alert.signOut.title"),
-                                body: Localization.string("alert.signOut.message"),
-                                actionLabel: Localization.string("action.signOutConfirm"),
+                                title: String(localized: "alert.signOut.title"),
+                                body: String(localized: "alert.signOut.message"),
+                                actionLabel: String(localized: "action.signOutConfirm"),
                                 action: {
                                     EncryptedKeychainWrapper.nuke()
                                     EncryptedKeychainWrapper.generateAndStoreKey()
@@ -239,7 +239,7 @@ struct ContentView: View {
                                     }
                                 })
                         } label: {
-                            Label(Localization.string("action.signOut"), systemImage: "person.fill.xmark")
+                            Label("action.signOut", systemImage: "person.fill.xmark")
                         }
                         .disabled(!store.isLoggedIn)
                     } label: {

@@ -40,7 +40,7 @@ struct LogView: View {
                         Haptic.shared.play(.soft)
                         UIPasteboard.general.string = log
                     } label: {
-                        Label(Localization.string("action.copyOutput"), systemImage: "doc.on.doc")
+                        Label("action.copyOutput", systemImage: "doc.on.doc")
                     }
                     
                     Button {
@@ -62,7 +62,7 @@ struct LogView: View {
                             print("[*] failed to export logs: \(error)")
                         }
                     } label: {
-                        Label(Localization.string("action.exportLogs"), systemImage: "square.and.arrow.up")
+                        Label("action.exportLogs", systemImage: "square.and.arrow.up")
                     }
                 }
             }
