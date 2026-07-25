@@ -13,7 +13,8 @@ struct SettingsView: View {
     @Environment(\.openURL) private var openURL
     
     @AppStorage("autoCleanApp") var autoCleanApp: Bool = true
-    
+    @AppStorage(AppLanguage.storageKey) private var languageCode: String = AppLanguage.english.rawValue
+
     var body: some View {
         NavigationStack {
             List {
@@ -24,51 +25,73 @@ struct SettingsView: View {
                             Button {
                                 openURL(URL(string: "https://jailbreak.party/discord")!)
                             } label: {
-                                ButtonLabel(text: "Discord", icon: "discord", useImage: true)
+                                ButtonLabel(text: Localization.string("action.discord"), icon: "discord", useImage: true)
                             }
                             .buttonStyle(TranslucentButtonStyle(color: .discord))
-                            
+
                             Button {
                                 openURL(URL(string: "https://github.com/jailbreakdotparty/PancakeStore")!)
                             } label: {
-                                ButtonLabel(text: "GitHub", icon: "github", useImage: true)
+                                ButtonLabel(text: Localization.string("action.github"), icon: "github", useImage: true)
                             }
                             .buttonStyle(TranslucentButtonStyle(color: .github))
                         }
-                        
+
                         Button {
                             openURL(URL(string: "https://jailbreak.party/")!)
                         } label: {
-                            ButtonLabel(text: "Website", icon: "globe")
+                            ButtonLabel(text: Localization.string("action.website"), icon: "globe")
                         }
                         .buttonStyle(TranslucentButtonStyle())
                     }
                 } header: {
-                    HeaderLabel(text: "About", icon: "info.circle")
+                    HeaderLabel(text: Localization.string("section.about.title"), icon: "info.circle")
                 }
-                
+
                 Section {
                     Toggle(isOn: $autoCleanApp) {
-                        Text("Auto-Clean App")
-                        Text("This is toggled on by default to make sure that PancakeStore doesn't keep any saved data from the app you had downgraded.")
+                        Text("settings.autoClean.title")
+                        Text("settings.autoClean.subtitle")
                     }
-                    
-                    Button("Clean Documents") {
+
+                    Button("action.cleanDocuments") {
                         cleanUp()
                     }
                 } header: {
-                    HeaderLabel(text: "Data", icon: "loupe")
+                    HeaderLabel(text: Localization.string("section.data.title"), icon: "loupe")
                 }
-                
+
                 Section {
-                    LinkCreditCell(image: Image("mineek"), name: "mineek", description: "Original developer of MuffinStore Jailed.", url: "https://github.com/mineek")
-                    LinkCreditCell(image: Image("lunginspector"), name: "lunginspector", description: "Obiliterated the frontend multiple times. Also did some backend fixes.", url: "https://github.com/lunginspector")
-                    LinkCreditCell(image: Image("skadz"), name: "Skadz", description: "Three-time authentication fixer, backend work, and project maintainer.", url: "https://github.com/skadz108")
+                    VStack(spacing: 12) {
+                        ForEach(AppLanguage.allCases) { language in
+                            Button {
+                                select(language)
+                            } label: {
+                                HStack {
+                                    Text(language.displayNameKey)
+                                    Spacer()
+                                    if language.rawValue == languageCode {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .foregroundStyle(.tint)
+                                    }
+                                }
+                            }
+                            .buttonStyle(TranslucentButtonStyle())
+                        }
+                    }
                 } header: {
-                    HeaderLabel(text: "Credits", icon: "star")
+                    HeaderLabel(text: Localization.string("section.language.title"), icon: "globe")
+                }
+
+                Section {
+                    LinkCreditCell(image: Image("mineek"), name: "mineek", description: Localization.string("credits.mineek"), url: "https://github.com/mineek")
+                    LinkCreditCell(image: Image("lunginspector"), name: "lunginspector", description: Localization.string("credits.lunginspector"), url: "https://github.com/lunginspector")
+                    LinkCreditCell(image: Image("skadz"), name: "Skadz", description: Localization.string("credits.skadz"), url: "https://github.com/skadz108")
+                } header: {
+                    HeaderLabel(text: Localization.string("section.credits.title"), icon: "star")
                 }
             }
-            .navigationTitle("Settings")
+            .navigationTitle("settings.title")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
@@ -79,5 +102,13 @@ struct SettingsView: View {
                 }
             }
         }
+    }
+}
+
+private extension SettingsView {
+    func select(_ language: AppLanguage) {
+        Haptic.shared.play(.soft)
+        languageCode = language.rawValue
+        Localization.setLanguage(language)
     }
 }

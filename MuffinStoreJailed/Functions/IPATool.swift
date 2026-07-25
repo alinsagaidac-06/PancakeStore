@@ -248,9 +248,13 @@ class StoreClient {
                                 print("need 2fa...")
                                 ret = false
                             } else {
-                                print("authentication failed: \(resp["customerMessage"] as! String)")
+                                let errorMessage = resp["customerMessage"] as! String
+                                print("Authentication failed: \(errorMessage)")
                                 DispatchQueue.main.async {
-                                    Alertinator.shared.alert(title: "Failed to log in!", body: "Make sure that your Apple ID and password are correct, and then try again.\n\nError: \(resp["customerMessage"] as! String)")
+                                    Alertinator.shared.alert(
+                                        title: Localization.string("alert.login.failed.title"),
+                                        body: Localization.string("alert.login.failed.message", arguments: errorMessage)
+                                    )
                                 }
                             }
                         } catch {
@@ -387,7 +391,7 @@ class IPATool {
         let downInfo = songList[0]
         let metadata = downInfo["metadata"] as? [String: Any] ?? [:]
         let appVerIds = metadata["softwareVersionExternalIdentifiers"] as? [Int] ?? []
-        print("Got available version ids: \(appVerIds)")
+        print("Got available version ids: \(appVerIds.description)")
         return appVerIds.map { String($0) }
     }
 
@@ -484,7 +488,7 @@ class EncryptedKeychainWrapper {
         ]
         var error: Unmanaged<CFError>?
         guard let privateKey = SecKeyCreateRandomKey(query as CFDictionary, &error) else {
-            print("Failed to generate key!!")
+            print("Failed to generate key!")
             return
         }
         print("Generated key!")

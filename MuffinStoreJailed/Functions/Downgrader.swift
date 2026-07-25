@@ -29,14 +29,14 @@ func downgradeAppToVersion(appId: String, versionId: String, ipaTool: IPATool) {
     
     let path = ipaTool.downloadIPAForVersion(appId: appId, appVerId: versionId)
     print("IPA downloaded to \(path)")
-    
+
     let tempDir = fm.temporaryDirectory
     let contents = try! fm.contentsOfDirectory(atPath: path)
     print("Contents: \(contents)")
     // also delete this; i wanna see both the app's directory and the temp ipa GONE.
     let destinationUrl = tempDir.appendingPathComponent("app.ipa")
     try! Zip.zipFiles(paths: contents.map { URL(fileURLWithPath: path).appendingPathComponent($0) }, zipFilePath: destinationUrl, password: nil, progress: nil)
-    print("IPA zipped to \(destinationUrl)")
+    print("IPA zipped to \(destinationUrl.path)")
     let path2 = URL(fileURLWithPath: path)
     var appDir = path2.appendingPathComponent("Payload")
     for file in try! fm.contentsOfDirectory(atPath: appDir.path) {
@@ -82,14 +82,14 @@ func downgradeAppToVersion(appId: String, versionId: String, ipaTool: IPATool) {
         
         try! server.start(port: 9090)
         print("Server has started listening")
-        
+
         DispatchQueue.main.async {
             print("Requesting app install")
-            
+
             let safariView = SafariWebView(url: URL(string: "http://127.0.0.1:9090/install")!)
             UIApplication.shared.windows.first?.rootViewController?.present(UIHostingController(rootView: safariView), animated: true, completion: nil)
         }
-        
+
         while server.isRunning {
             sleep(1)
         }
@@ -99,19 +99,23 @@ func downgradeAppToVersion(appId: String, versionId: String, ipaTool: IPATool) {
 
 func promptForVersionId(appId: String, versionIds: [String], ipaTool: IPATool) {
     let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-    let alert = UIAlertController(title: "Enter version ID", message: "Select a version to downgrade to", preferredStyle: isiPad ? .alert : .actionSheet)
+    let alert = UIAlertController(
+        title: Localization.string("alert.version.enter.title"),
+        message: Localization.string("alert.version.enter.message"),
+        preferredStyle: isiPad ? .alert : .actionSheet
+    )
     for versionId in versionIds {
         alert.addAction(UIAlertAction(title: versionId, style: .default, handler: { _ in
             downgradeAppToVersion(appId: appId, versionId: versionId, ipaTool: ipaTool)
         }))
     }
-    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+    alert.addAction(UIAlertAction(title: Localization.string("action.cancel"), style: .cancel, handler: nil))
     UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: nil)
 }
 
 func showAlert(title: String, message: String) {
     let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    alert.addAction(UIAlertAction(title: Localization.string("action.ok"), style: .default, handler: nil))
     UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: nil)
 }
 
@@ -122,7 +126,7 @@ func getAllAppVersionIdsFromServer(appId: String, ipaTool: IPATool) {
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
             DispatchQueue.main.async {
-                showAlert(title: "Error", message: error.localizedDescription)
+                showAlert(title: Localization.string("alert.error.title"), message: error.localizedDescription)
             }
             return
         }
@@ -130,19 +134,23 @@ func getAllAppVersionIdsFromServer(appId: String, ipaTool: IPATool) {
         let versionIds = json["data"] as! [Dictionary<String, Any>]
         if versionIds.count == 0 {
             DispatchQueue.main.async {
-                showAlert(title: "Error", message: "No version IDs, internal error maybe?")
+                showAlert(title: Localization.string("alert.error.title"), message: Localization.string("alert.version.none"))
             }
             return
         }
         DispatchQueue.main.async {
             let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-            let alert = UIAlertController(title: "Select a version", message: "Select a version to downgrade to", preferredStyle: isiPad ? .alert : .actionSheet)
+            let alert = UIAlertController(
+                title: Localization.string("alert.version.select.title"),
+                message: Localization.string("alert.version.select.message"),
+                preferredStyle: isiPad ? .alert : .actionSheet
+            )
             for versionId in versionIds {
                 alert.addAction(UIAlertAction(title: "\(versionId["bundle_version"]!)", style: .default, handler: { _ in
                     downgradeAppToVersion(appId: appId, versionId: "\(versionId["external_identifier"]!)", ipaTool: ipaTool)
                 }))
             }
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: Localization.string("action.cancel"), style: .cancel, handler: nil))
             UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: nil)
         }
     }
@@ -154,21 +162,28 @@ func downgradeApp(appId: String, ipaTool: IPATool) -> Bool {
     if versionIds.isEmpty {
         print("No version ids were found, aborting...")
         DispatchQueue.main.async {
-            Alertinator.shared.alert(title: "Failed to downgrade app!", body: "Failed to get available version ids. This may be because the app has not been purchased yet, or there are no versions available to downgrade to.")
+            Alertinator.shared.alert(
+                title: Localization.string("alert.downgrade.failed.title"),
+                body: Localization.string("alert.downgrade.failed.message")
+            )
         }
         return false
     }
-    
+
     let isiPad = UIDevice.current.userInterfaceIdiom == .pad
-    
-    let alert = UIAlertController(title: "Version ID", message: "Do you want to enter the version ID manually or request the list of version IDs from the server?", preferredStyle: isiPad ? .alert : .actionSheet)
-    alert.addAction(UIAlertAction(title: "Manual", style: .default, handler: { _ in
+
+    let alert = UIAlertController(
+        title: Localization.string("alert.version.mode.title"),
+        message: Localization.string("alert.version.mode.message"),
+        preferredStyle: isiPad ? .alert : .actionSheet
+    )
+    alert.addAction(UIAlertAction(title: Localization.string("alert.version.mode.manual"), style: .default, handler: { _ in
         promptForVersionId(appId: appId, versionIds: versionIds, ipaTool: ipaTool)
     }))
-    alert.addAction(UIAlertAction(title: "Server", style: .default, handler: { _ in
+    alert.addAction(UIAlertAction(title: Localization.string("alert.version.mode.server"), style: .default, handler: { _ in
         getAllAppVersionIdsFromServer(appId: appId, ipaTool: ipaTool)
     }))
-    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+    alert.addAction(UIAlertAction(title: Localization.string("action.cancel"), style: .cancel, handler: nil))
     UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true, completion: nil)
     return true
 }

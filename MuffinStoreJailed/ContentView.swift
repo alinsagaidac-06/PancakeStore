@@ -42,51 +42,51 @@ struct ContentView: View {
                     LogView()
                         .modifier(TerminalPlatter())
                 } header: {
-                    HeaderLabel(text: "Logs", icon: "terminal")
+                    HeaderLabel(text: Localization.string("section.logs.title"), icon: "terminal")
                 } footer: {
-                    Text("Made with love by the [jailbreak.party](https://jailbreak.party) team.\n[Join the jailbreak.party Discord!](https://jailbreak.party/discord)")
+                    Text("section.logs.footer")
                 }
-                
+
                 // login stuff
                 if !store.isLoggedIn {
                     Section {
-                        TextField("Apple ID", text: $appleId)
+                        TextField("login.placeholder.appleId", text: $appleId)
                             .autocorrectionDisabled()
                             .textInputAutocapitalization(.never)
-                        SecureField("Password", text: $password)
+                        SecureField("login.placeholder.password", text: $password)
                             .autocorrectionDisabled()
                             .textInputAutocapitalization(.never)
                     } header: {
-                        HeaderLabel(text: "Log In", icon: "cloud")
+                        HeaderLabel(text: Localization.string("section.login.title"), icon: "cloud")
                     } footer: {
-                        Text("If you are having issues logging in, please [see here](https://jailbreak.party/pancakestore/authentication).")
+                        Text("section.login.footer")
                     }
-                    
+
                     if store.sent2FA {
                         Section {
-                            TextField("2FA Code", text: $authCode)
+                            TextField("login.placeholder.twoFactor", text: $authCode)
                                 .keyboardType(.numberPad)
                                 .autocorrectionDisabled()
                                 .textInputAutocapitalization(.never)
                         } header: {
-                            HeaderLabel(text: "Authentication", icon: "faceid")
+                            HeaderLabel(text: Localization.string("section.verification.title"), icon: "faceid")
                         }
                     }
                 }
-                
+
                 // on login
                 if store.isLoggedIn && !isDowngrading {
                     Section {
-                        TextField("App Store URL", text: $storeURL)
+                        TextField("downgrade.placeholder.link", text: $storeURL)
                             .autocorrectionDisabled()
                             .textInputAutocapitalization(.never)
                     } header: {
-                        HeaderLabel(text: "Downgrade App", icon: "arrow.down.app")
+                        HeaderLabel(text: Localization.string("section.downgrade.title"), icon: "arrow.down.app")
                     } footer: {
-                        Text("Not all apps are eligible for downgrading. Make sure that you've purchased the app in the App Store and that it is not currently installed before continuing.")
+                        Text("section.downgrade.footer")
                     }
                 }
-                
+
                 // while downgrading
                 if isDowngrading {
                     Section {
@@ -94,18 +94,18 @@ struct ContentView: View {
                             HStack(spacing: 12) {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundStyle(.green)
-                                Text("Downgraded Application!")
+                                Text(Localization.string("status.downgradeSuccessful"))
                             }
                         } else {
                             HStack(spacing: 12) {
                                 ProgressView()
-                                Text("Downgrading Application...")
+                                Text(Localization.string("status.downgrading"))
                             }
                         }
                     }
-                    
+
                     Section {
-                        LabeledContent("App Store URL") {
+                        LabeledContent("downgrade.placeholder.link") {
                             if storeURL.isEmpty {
                                 ProgressView()
                             } else {
@@ -114,13 +114,13 @@ struct ContentView: View {
                                         Button {
                                             UIPasteboard.general.string = storeURL
                                         } label: {
-                                            Label("Copy", systemImage: "doc.on.doc")
+                                            Label(Localization.string("action.copy"), systemImage: "doc.on.doc")
                                         }
                                     }
                             }
                         }
-                        
-                        LabeledContent("Bundle ID") {
+
+                        LabeledContent("info.label.bundleId") {
                             if store.appBID.isEmpty {
                                 ProgressView()
                             } else {
@@ -129,13 +129,13 @@ struct ContentView: View {
                                         Button {
                                             UIPasteboard.general.string = store.appBID
                                         } label: {
-                                            Label("Copy", systemImage: "doc.on.doc")
+                                            Label(Localization.string("action.copy"), systemImage: "doc.on.doc")
                                         }
                                     }
                             }
                         }
-                        
-                        LabeledContent("Version") {
+
+                        LabeledContent("info.label.targetVersion") {
                             if store.appVersion.isEmpty {
                                 ProgressView()
                             } else {
@@ -143,11 +143,11 @@ struct ContentView: View {
                             }
                         }
                     } header: {
-                        HeaderLabel(text: "App Info", icon: "info.circle")
+                        HeaderLabel(text: Localization.string("section.appInfo.title"), icon: "info.circle")
                     }
                 }
             }
-            .navigationTitle("PancakeStore")
+            .navigationTitle("app.name")
             .scrollDismissesKeyboard(.interactively)
             .safeAreaInset(edge: .bottom) {
                 Group {
@@ -156,7 +156,7 @@ struct ContentView: View {
                             ipaTool = IPATool(appleId: appleId, password: password)
                             let _ = ipaTool?.authenticate(requestCode: true)
                         } label: {
-                            ButtonLabel(text: "Continue", icon: "arrow.right")
+                            ButtonLabel(text: Localization.string("action.continue"), icon: "arrow.right")
                         }
                         .buttonStyle(FancyButtonStyle())
                         .disabled(appleId.isEmpty || password.isEmpty)
@@ -168,7 +168,7 @@ struct ContentView: View {
                             ipaTool = IPATool(appleId: appleId, password: finalPassword)
                             let _ = ipaTool?.authenticate()
                         } label: {
-                            ButtonLabel(text: "Log In", icon: "arrow.right")
+                            ButtonLabel(text: Localization.string("action.logIn"), icon: "arrow.right")
                         }
                         .buttonStyle(FancyButtonStyle())
                         .disabled(authCode.isEmpty)
@@ -191,7 +191,7 @@ struct ContentView: View {
                             
                             isDowngrading = downgradeApp(appId: appLinkParsed, ipaTool: ipaTool!)
                         } label: {
-                            ButtonLabel(text: "Downgrade App", icon: "arrow.down")
+                            ButtonLabel(text: Localization.string("action.downgradeApp"), icon: "arrow.down")
                         }
                         .buttonStyle(FancyButtonStyle())
                         .disabled(storeURL.isEmpty)
@@ -202,7 +202,7 @@ struct ContentView: View {
                             Button {
                                 LSApplicationWorkspace.default().openApplication(withBundleID: store.appBID)
                             } label: {
-                                ButtonLabel(text: "Open App", icon: "arrow.up.right.square")
+                                ButtonLabel(text: Localization.string("action.openApp"), icon: "arrow.up.right.square")
                             }
                             .buttonStyle(FancyButtonStyle())
                             .disabled(!store.hasServedApp)
@@ -216,26 +216,30 @@ struct ContentView: View {
                     Menu {
                         if store.isLoggedIn {
                             Button(action: {}) {
-                                Text("Signed in as \(accountName)")
+                                Text(Localization.string("menu.signedInAs", arguments: accountName))
                                 Text("\(appleId)")
                             }
                         } else {
                             Button(action: {}) {
-                                Text("Not signed in")
-                                Text("Sign in to downgrade apps.")
+                                Text("menu.notSignedIn")
+                                Text("menu.signInPrompt")
                             }
                         }
-                        
+
                         Button(role: .destructive) {
-                            Alertinator.shared.alert(title: "Are you sure you'd like to do this?", body: "You'll have to sign back in again to use PancakeStore.", actionLabel: "Sign out", action: {
-                                EncryptedKeychainWrapper.nuke()
-                                EncryptedKeychainWrapper.generateAndStoreKey()
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                                    exitinator()
-                                }
-                            })
+                            Alertinator.shared.alert(
+                                title: Localization.string("alert.signOut.title"),
+                                body: Localization.string("alert.signOut.message"),
+                                actionLabel: Localization.string("action.signOutConfirm"),
+                                action: {
+                                    EncryptedKeychainWrapper.nuke()
+                                    EncryptedKeychainWrapper.generateAndStoreKey()
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                        exitinator()
+                                    }
+                                })
                         } label: {
-                            Label("Sign Out", systemImage: "person.fill.xmark")
+                            Label(Localization.string("action.signOut"), systemImage: "person.fill.xmark")
                         }
                         .disabled(!store.isLoggedIn)
                     } label: {
@@ -258,8 +262,8 @@ struct ContentView: View {
                 print("\n[*] PancakeStore v\(AppInfo.appVersion) (Beta 1)")
                 print("[*] Running on \(device.systemName) \(device.systemVersion), \(machineName()).")
                 store.isLoggedIn = EncryptedKeychainWrapper.hasAuthInfo()
-                print("Found \(store.isLoggedIn ? "auth" : "no auth") info in keychain")
-                
+                print(store.isLoggedIn ? "Found auth info in keychain" : "Found no auth info in keychain")
+
                 if store.isLoggedIn {
                     guard let authInfo = EncryptedKeychainWrapper.getAuthInfo() else {
                         print("Failed to get auth info from keychain, logging out")
@@ -268,14 +272,14 @@ struct ContentView: View {
                         EncryptedKeychainWrapper.generateAndStoreKey()
                         return
                     }
-                    
+
                     appleId = authInfo["appleId"]! as! String
                     password = authInfo["password"]! as! String
                     accountName = authInfo["accountName"]! as! String
-                    
+
                     ipaTool = IPATool(appleId: appleId, password: password)
                     let result = ipaTool?.authenticate()
-                    print("Re-authenticated \(result ?? false ? "successfully" : "unsuccessfully")")
+                    print(result ?? false ? "Re-authenticated successfully" : "Re-authenticated unsuccessfully")
                 } else {
                     print("No auth info found in keychain, setting up by generating a key in SEP")
                     EncryptedKeychainWrapper.generateAndStoreKey()
