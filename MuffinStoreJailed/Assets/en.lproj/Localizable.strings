@@ -1,76 +1,77 @@
 "app.name" = "PancakeStore";
 
-"section.logs.title" = "日志";
-"section.logs.footer" = "由 [jailbreak.party](https://jailbreak.party) 团队倾力打造。\n[加入 jailbreak.party Discord！](https://jailbreak.party/discord)";
+"section.logs.title" = "Logs";
+"section.logs.footer" = "Made with love by the [jailbreak.party](https://jailbreak.party) team.\n[Join the jailbreak.party Discord!](https://jailbreak.party/discord)";
 
 "login.placeholder.appleId" = "Apple ID";
-"login.placeholder.password" = "密码";
-"section.login.title" = "登录";
-"section.login.footer" = "如果登录时遇到问题，请[查看这里](https://jailbreak.party/pancakestore/authentication)。";
-"login.placeholder.twoFactor" = "2FA 验证码";
-"section.verification.title" = "身份验证";
+"login.placeholder.password" = "Password";
+"section.login.title" = "Log In";
+"section.login.footer" = "If you are having issues logging in, please [see here](https://jailbreak.party/pancakestore/authentication).";
+"login.placeholder.twoFactor" = "2FA Code";
+"section.verification.title" = "Authentication";
 
 "downgrade.placeholder.link" = "App Store URL";
-"section.downgrade.title" = "降级应用";
-"section.downgrade.footer" = "并非所有应用都支持降级。请确保您已在 App Store 购买该应用，并且当前未安装该应用，然后再继续。";
+"section.downgrade.title" = "Downgrade App";
+"section.downgrade.footer" = "Not all apps are eligible for downgrading. Make sure that you've purchased the app in the App Store and that it is not currently installed before continuing.";
 
-"status.downgradeSuccessful" = "应用降级成功！";
-"status.downgrading" = "正在降级应用…";
+"status.downgradeSuccessful" = "Downgraded Application!";
+"status.downgrading" = "Downgrading Application...";
 
-"action.copy" = "复制";
+"action.copy" = "Copy";
 "info.label.bundleId" = "Bundle ID";
-"info.label.targetVersion" = "版本";
-"section.appInfo.title" = "应用信息";
+"info.label.targetVersion" = "Version";
+"section.appInfo.title" = "App Info";
 
-"action.continue" = "继续";
-"action.logIn" = "登录";
-"action.downgradeApp" = "降级应用";
-"action.openApp" = "打开应用";
+"action.continue" = "Continue";
+"action.logIn" = "Log In";
+"action.downgradeApp" = "Downgrade App";
+"action.openApp" = "Open App";
 
-"menu.signedInAs" = "当前登录：%@";
-"menu.notSignedIn" = "未登录";
-"menu.signInPrompt" = "登录后即可降级应用。";
-"alert.signOut.title" = "确定要执行此操作吗？";
-"alert.signOut.message" = "如需继续使用 PancakeStore，您需要重新登录。";
-"action.signOut" = "退出登录";
-"action.signOutConfirm" = "退出登录";
+"menu.signedInAs" = "Signed in as %@";
+"menu.notSignedIn" = "Not signed in";
+"menu.signInPrompt" = "Sign in to downgrade apps.";
+"alert.signOut.title" = "Are you sure you'd like to do this?";
+"alert.signOut.message" = "You'll have to sign back in again to use PancakeStore.";
+"action.signOut" = "Sign Out";
+"action.signOutConfirm" = "Sign out";
 
-"section.about.title" = "关于";
+"section.about.title" = "About";
 "action.discord" = "Discord";
 "action.github" = "GitHub";
-"action.website" = "官网";
-"settings.autoClean.title" = "自动清理应用";
-"settings.autoClean.subtitle" = "默认启用。确保 PancakeStore 不会保留已降级应用的任何数据。";
-"action.cleanDocuments" = "清理文稿";
-"section.data.title" = "数据";
-"section.credits.title" = "鸣谢";
-"credits.mineek" = "MuffinStore Jailed 原开发者。";
-"credits.lunginspector" = "多次重构前端，同时修复了部分后端问题。";
-"credits.skadz" = "三次修复身份验证、负责后端开发及项目维护。";
-"credits.localizations.gerda" = "俄语本地化。";
-"credits.localizations.roooot" = "德语本地化。";
-"settings.title" = "设置";
-"section.language.title" = "语言";
+"action.website" = "Website";
+"settings.autoClean.title" = "Auto-Clean App";
+"settings.autoClean.subtitle" = "This is toggled on by default to make sure that PancakeStore doesn't keep any saved data from the app you had downgraded.";
+"action.cleanDocuments" = "Clean Documents";
+"section.data.title" = "Data";
+"section.credits.title" = "Credits";
+"credits.mineek" = "Original developer of MuffinStore Jailed.";
+"credits.lunginspector" = "Obliterated the frontend multiple times. Also did some backend fixes.";
+"credits.skadz" = "Three-time authentication fixer, backend work, and project maintainer.";
+"credits.localizations.gerda" = "Russian localization.";
+"credits.localizations.roooot" = "German localization.";
+"settings.title" = "Settings";
+"section.language.title" = "Language";
 "language.english" = "English";
 "language.russian" = "Russian";
 
-"action.copyOutput" = "复制输出";
-"action.exportLogs" = "导出日志";
+"action.copyOutput" = "Copy Output";
+"action.exportLogs" = "Export Logs";
 
-"alert.version.enter.title" = "输入版本 ID";
-"alert.version.enter.message" = "选择要降级到的版本";
-"action.cancel" = "取消";
-"action.ok" = "确定";
-"alert.error.title" = "错误";
-"alert.version.none" = "未找到版本 ID，可能是内部错误。";
-"alert.version.select.title" = "选择版本";
-"alert.version.select.message" = "选择要降级到的版本";
-"alert.downgrade.failed.title" = "应用降级失败！";
-"alert.downgrade.failed.message" = "获取可用版本 ID 失败。这可能是因为该应用尚未购买，或没有可供降级的版本。";
-"alert.version.mode.title" = "版本 ID";
-"alert.version.mode.message" = "您想手动输入版本 ID，还是从服务器获取版本 ID 列表？";
-"alert.version.mode.manual" = "手动输入";
-"alert.version.mode.server" = "服务器";
+"alert.version.enter.title" = "Enter version ID";
+"alert.version.enter.message" = "Select a version to downgrade to";
+"action.cancel" = "Cancel";
+"action.ok" = "OK";
+"alert.error.title" = "Error";
+"alert.version.none" = "No version IDs, internal error maybe?";
+"alert.version.select.title" = "Select a version";
+"alert.version.select.message" = "Select a version to downgrade to";
+"alert.downgrade.failed.title" = "Failed to downgrade app!";
+"alert.downgrade.failed.message" = "Failed to get available version ids. This may be because the app has not been purchased yet, or there are no versions available to downgrade to.";
+"alert.version.mode.title" = "Version ID";
+"alert.version.mode.message" = "Do you want to enter the version ID manually or request the list of version IDs from the server?";
+"alert.version.mode.manual" = "Manual";
+"alert.version.mode.server" = "Server";
 
-"alert.login.failed.title" = "登录失败！";
-"alert.login.failed.message" = "请确认您的 Apple ID 和密码是否正确，然后重试。\n\n错误：%@";
+"alert.login.failed.title" = "Failed to log in!";
+"alert.login.failed.message" = "Make sure that your Apple ID and password are correct, and then try again.\n\nError: %@";
+
