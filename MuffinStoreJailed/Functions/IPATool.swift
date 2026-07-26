@@ -220,7 +220,7 @@ class StoreClient {
                         completion(false, data, httpResponse)
                         return
                     }
-                    print("failed to get pod, retrying with new url: \(newURL)")
+                    print("russia fix")
                     attemptGetPod(url: newURL, completion: completion)
                 }
             }
