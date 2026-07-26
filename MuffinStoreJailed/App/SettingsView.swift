@@ -65,6 +65,7 @@ struct SettingsView: View {
                     LinkCreditCell(image: Image("lunginspector"), name: "lunginspector", description: String(localized: "credits.lunginspector"), url: "https://github.com/lunginspector")
                     LinkCreditCell(image: Image("skadz"), name: "Skadz", description: String(localized: "credits.skadz"), url: "https://github.com/skadz108")
                     LinkCreditCell(image: Image("gerda"), name: "gerda", description: String(localized: "credits.localizations.gerda"), url: "https://github.com/ezn1hero")
+                    LinkCreditCell(image: Image("rooootdev"), name: "rooootdev", description: String(localized: "credits.localizations.roooot"), url: "https://github.com/rooootdev")
                 } header: {
                     HeaderLabel(text: String(localized: "section.credits.title"), icon: "star")
                 }

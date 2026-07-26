@@ -259,7 +259,7 @@ struct ContentView: View {
                 SettingsView()
             }
             .onAppear {
-                print("\n[*] PancakeStore v\(AppInfo.appVersion) (Beta 1)")
+                print("\n[*] PancakeStore v\(AppInfo.appVersion) (Beta 2)")
                 print("[*] Running on \(device.systemName) \(device.systemVersion), \(machineName()).")
                 store.isLoggedIn = EncryptedKeychainWrapper.hasAuthInfo()
                 print(store.isLoggedIn ? "Found auth info in keychain" : "Found no auth info in keychain")
