@@ -64,8 +64,41 @@ struct SettingsView: View {
                     LinkCreditCell(image: Image("mineek"), name: "mineek", description: String(localized: "credits.mineek"), url: "https://github.com/mineek")
                     LinkCreditCell(image: Image("lunginspector"), name: "lunginspector", description: String(localized: "credits.lunginspector"), url: "https://github.com/lunginspector")
                     LinkCreditCell(image: Image("skadz"), name: "Skadz", description: String(localized: "credits.skadz"), url: "https://github.com/skadz108")
-                    LinkCreditCell(image: Image("gerda"), name: "gerda", description: String(localized: "credits.localizations.gerda"), url: "https://github.com/ezn1hero")
-                    LinkCreditCell(image: Image("rooootdev"), name: "rooootdev", description: String(localized: "credits.localizations.roooot"), url: "https://github.com/rooootdev")
+                    
+                    NavigationLink {
+                        List {
+                            // partyui v1.2 -> convert these into components
+                            Button {
+                                openURL(URL(string: "https://github.com/ezn1hero")!)
+                            } label: {
+                                LabeledContent("gerda") {
+                                    Text("language.russian")
+                                }
+                                .foregroundStyle(Color(.label))
+                            }
+                            
+                            Button {
+                                openURL(URL(string: "https://github.com/rooootdev")!)
+                            } label: {
+                                LabeledContent("roooot") {
+                                    Text("language.german")
+                                }
+                                .foregroundStyle(Color(.label))
+                            }
+                            
+                            Button {
+                                openURL(URL(string: "https://github.com/TrollStoreX")!)
+                            } label: {
+                                LabeledContent("TrollStoreX") {
+                                    Text("language.chineseSimp")
+                                }
+                                .foregroundStyle(Color(.label))
+                            }
+                        }
+                        .navigationTitle("Translators")
+                    } label: {
+                        Text("Translators")
+                    }
                 } header: {
                     HeaderLabel(text: String(localized: "section.credits.title"), icon: "star")
                 }

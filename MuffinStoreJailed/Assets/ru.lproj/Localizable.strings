@@ -47,12 +47,12 @@
 "credits.mineek" = "Оригинальный разработчик MuffinStore Jailed.";
 "credits.lunginspector" = "Несколько раз переделывал интерфейс. Также исправлял бэкенд.";
 "credits.skadz" = "Трижды чинил аутентификацию, работал над бэкендом, поддерживает проект.";
-"credits.localizations.gerda" = "Русская локализация.";
-"credits.localizations.roooot" = "Немецкий локализация.";
 "settings.title" = "Настройки";
 "section.language.title" = "Язык";
 "language.english" = "Английский";
 "language.russian" = "Русский";
+"language.german" = "Немецкий";
+"language.chineseSimp" = "китайский";
 
 "action.copyOutput" = "Копировать вывод";
 "action.exportLogs" = "Экспорт логов";

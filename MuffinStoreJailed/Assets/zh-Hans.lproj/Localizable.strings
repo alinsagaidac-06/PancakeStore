@@ -51,8 +51,11 @@
 "credits.localizations.roooot" = "德语本地化。";
 "settings.title" = "设置";
 "section.language.title" = "语言";
+// not certain if these are supposed to be translated?
 "language.english" = "English";
 "language.russian" = "Russian";
+"language.german" = "German";
+"language.chineseSimp" = "Chinese";
 
 "action.copyOutput" = "复制输出";
 "action.exportLogs" = "导出日志";
