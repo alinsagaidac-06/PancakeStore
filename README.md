@@ -34,5 +34,7 @@ The target app must meet the following requirements:
 
 ## Credits
 - [Mineek](https://github.com/mineek): Created the original project.
-- [skadz108](https://github.com/skadz108): Multiple fixes to authentication throughout apple's server-side changes.
+- [skadz108](https://github.com/skadz108): Project maintainer, backend developer, and various authentication fixes.
 - [lunginspector](https://github.com/lunginspector): Frontend manager and QoL improvements.
+- [gerda](https://github.com/ezn1hero): Russian localization.
+- [rooootdev](https://github.com/rooootdev): German localization.
