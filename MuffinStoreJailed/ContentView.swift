@@ -21,6 +21,8 @@ final class StoreData: ObservableObject {
 struct ContentView: View {
     @StateObject private var store = StoreData.shared
     @State private var ipaTool: IPATool?
+    @State private var showIPAExporter = false
+    @State private var ipaURL: URL?
     
     @State private var appleId = ""
     @State private var password = ""
@@ -198,16 +200,36 @@ struct ContentView: View {
                     }
                     
                     if isDowngrading {
-                        VStack {
-                            Button {
-                                LSApplicationWorkspace.default().openApplication(withBundleID: store.appBID)
-                            } label: {
-                                ButtonLabel(text: String(localized: "action.openApp"), icon: "arrow.up.right.square")
-                            }
-                            .buttonStyle(FancyButtonStyle())
-                            .disabled(!store.hasServedApp)
-                        }
-                    }
+    VStack {
+        Button {
+            LSApplicationWorkspace.default().openApplication(withBundleID: store.appBID)
+        } label: {
+            ButtonLabel(
+                text: String(localized: "action.openApp"),
+                icon: "arrow.up.right.square"
+            )
+        }
+        .buttonStyle(FancyButtonStyle())
+        .disabled(!store.hasServedApp)
+
+        Button {
+            let url = FileManager.default.temporaryDirectory
+                .appendingPathComponent("app.ipa")
+
+            if FileManager.default.fileExists(atPath: url.path) {
+                ipaURL = url
+                showIPAExporter = true
+            }
+        } label: {
+            ButtonLabel(
+                text: "Export IPA",
+                icon: "square.and.arrow.up"
+            )
+        }
+        .buttonStyle(FancyButtonStyle())
+        .disabled(!store.hasServedApp)
+    }
+}
                 }
                 .modifier(OverlayBackground())
             }
@@ -256,8 +278,13 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showSettings) {
-                SettingsView()
-            }
+    SettingsView()
+}
+.sheet(isPresented: $showIPAExporter) {
+    if let ipaURL = ipaURL {
+        ShareSheet(items: [ipaURL])
+    }
+}
             .onAppear {
                 print("\n[*] PancakeStore v\(AppInfo.appVersion) (\(appBuild))")
                 print("[*] Running on \(device.systemName) \(device.systemVersion), \(machineName()).")
@@ -296,6 +323,21 @@ struct ContentView: View {
     }
 }
 
+struct ShareSheet: UIViewControllerRepresentable {
+    let items: [Any]
+
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(
+            activityItems: items,
+            applicationActivities: nil
+        )
+    }
+
+    func updateUIViewController(
+        _ uiViewController: UIActivityViewController,
+        context: Context
+    ) {}
+}
 func machineName() -> String {
     var systemInfo = utsname()
     uname(&systemInfo)
