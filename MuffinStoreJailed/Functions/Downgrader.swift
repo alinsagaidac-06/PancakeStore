@@ -64,14 +64,18 @@ func downgradeAppToVersion(appId: String, versionId: String, ipaTool: IPATool) {
         let server = Server()
 
         server.route(.GET, "signed.ipa", { _ in
-            print("Serving signed.ipa")
-            let signedIPAData = try Data(contentsOf: destinationUrl)
-            return HTTPResponse(body: signedIPAData)
-        })
+    print("Serving signed.ipa")
+    let signedIPAData = try Data(contentsOf: destinationUrl)
+
+    DispatchQueue.main.async {
+        data.hasServedApp = true
+    }
+
+    return HTTPResponse(body: signedIPAData)
+})
 
         server.route(.GET, "install", { _ in
             print("Serving install page")
-            data.hasServedApp = true
             let installPage = """
             <script type="text/javascript">
                 window.location = "\(installURL)"
