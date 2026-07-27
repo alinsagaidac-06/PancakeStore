@@ -19,7 +19,7 @@ struct SettingsView: View {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 10) {
-                        AppInfoCell(build: "Release")
+                        AppInfoCell(build: appBuild)
                         HStack {
                             Button {
                                 openURL(URL(string: "https://jailbreak.party/discord")!)
@@ -68,36 +68,25 @@ struct SettingsView: View {
                     NavigationLink {
                         List {
                             // partyui v1.2 -> convert these into components
-                            Button {
-                                openURL(URL(string: "https://github.com/ezn1hero")!)
-                            } label: {
-                                LabeledContent("gerda") {
-                                    Text("language.russian")
-                                }
-                                .foregroundStyle(Color(.label))
-                            }
+                            TranslatorCreditCell(name: "gerda", languageKey: "language.russian", url: "https://github.com/ezn1hero")
                             
-                            Button {
-                                openURL(URL(string: "https://github.com/rooootdev")!)
-                            } label: {
-                                LabeledContent("roooot") {
-                                    Text("language.german")
-                                }
-                                .foregroundStyle(Color(.label))
-                            }
+                            TranslatorCreditCell(name: "roooot", languageKey: "language.german", url: "https://github.com/rooootdev")
                             
-                            Button {
-                                openURL(URL(string: "https://github.com/TrollStoreX")!)
-                            } label: {
-                                LabeledContent("TrollStoreX") {
-                                    Text("language.chineseSimp")
-                                }
-                                .foregroundStyle(Color(.label))
-                            }
+                            TranslatorCreditCell(name: "TrollStoreX", languageKey: "language.chineseSimp", url: "https://github.com/TrollStoreX")
+                            
+                            TranslatorCreditCell(name: "neonmodder123", languageKey: "language.arabic", url: "https://github.com/neonmodder123")
+                            
+                            TranslatorCreditCell(name: "Jurre", languageKey: "language.dutch", url: "https://github.com/jurre111")
+                            
+                            TranslatorCreditCell(name: "MineTurtlee", languageKey: "language.vietnamese", url: "https://github.com/MineTurtlee")
+                            
+                            TranslatorCreditCell(name: "nxtcoreee3", languageKey: "language.swedish, language.romanian", url: "https://github.com/nxtcoreee3")
+                            
+                            TranslatorCreditCell(name: "fil", languageKey: "language.italian", url: "https://github.com/tiziodied")
                         }
-                        .navigationTitle("Translators")
+                        .navigationTitle("credits.translators.title")
                     } label: {
-                        Text("Translators")
+                        Text("credits.translators.title")
                     }
                 } header: {
                     HeaderLabel(text: String(localized: "section.credits.title"), icon: "star")
@@ -115,4 +104,58 @@ struct SettingsView: View {
             }
         }
     }
+}
+
+var creditCell: CGFloat {
+    if #available(iOS 19.0, *) { return 14 } else { return 16 }
+}
+
+// add to partyui?
+struct TranslatorCreditCell: View {
+    var name: String
+    var languageDisplay: String
+    var url: String
+    @Environment(\.openURL) var openURL
+    
+    public init(name: String, languageKey: String, url: String = "") {
+        self.name = name
+        self.url = url
+        
+        let localizedNames = languageKey
+            .split(separator: ",")
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .map { String(localized: String.LocalizationValue($0)) }
+        
+        let formatter = ListFormatter()
+        self.languageDisplay = formatter.string(from: localizedNames) ?? localizedNames.joined(separator: ", ")
+    }
+    
+    public var body: some View {
+        Button(action: {
+            if !url.isEmpty, let link = URL(string: url) { openURL(link) }
+        }) {
+            HStack(spacing: creditCell) {
+                VStack(alignment: .leading) {
+                    Text(name)
+                        .fontWeight(.semibold)
+                    Text(languageDisplay)
+                        .multilineTextAlignment(.leading)
+                        .font(.subheadline)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                if !url.isEmpty {
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.tertiary)
+                        .imageScale(.small)
+                }
+            }
+        }
+        .foregroundStyle(Color(.label))
+    }
+}
+
+#Preview {
+    SettingsView()
 }

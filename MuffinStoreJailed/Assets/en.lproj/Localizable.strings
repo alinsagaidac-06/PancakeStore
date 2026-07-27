@@ -49,10 +49,17 @@
 "credits.skadz" = "Three-time authentication fixer, backend work, and project maintainer.";
 "settings.title" = "Settings";
 "section.language.title" = "Language";
+"credits.translators.title" = "Translators";
 "language.english" = "English";
 "language.russian" = "Russian";
 "language.german" = "German";
 "language.chineseSimp" = "Chinese";
+"language.arabic" = "Arabic";
+"language.dutch" = "Dutch";
+"language.vietnamese" = "Vietnamese";
+"language.swedish" = "Swedish";
+"language.romanian" = "Romanian";
+"language.italian" = "Italian";
 
 "action.copyOutput" = "Copy Output";
 "action.exportLogs" = "Export Logs";

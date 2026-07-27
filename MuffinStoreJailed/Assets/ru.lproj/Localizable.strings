@@ -49,10 +49,17 @@
 "credits.skadz" = "Трижды чинил аутентификацию, работал над бэкендом, поддерживает проект.";
 "settings.title" = "Настройки";
 "section.language.title" = "Язык";
+"credits.translators.title" = "Переводчики";
 "language.english" = "Английский";
 "language.russian" = "Русский";
 "language.german" = "Немецкий";
-"language.chineseSimp" = "китайский";
+"language.chineseSimp" = "Китайский";
+"language.arabic" = "Арабский";
+"language.dutch" = "Нидерландский";
+"language.vietnamese" = "Вьетнамский";
+"language.swedish" = "Шведский";
+"language.romanian" = "Румынский";
+"language.italian" = "Итальянский";
 
 "action.copyOutput" = "Копировать вывод";
 "action.exportLogs" = "Экспорт логов";

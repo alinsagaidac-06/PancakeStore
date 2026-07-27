@@ -13,6 +13,8 @@ var sema = DispatchSemaphore(value: 0)
 var weOnADebugBuild: Bool = false
 let fm = FileManager.default
 
+let appBuild = "Beta 1"
+
 @main
 struct MuffinStoreJailedApp: App {
     @AppStorage("autoCleanApp") var autoCleanApp: Bool = true

@@ -49,10 +49,17 @@
 "credits.skadz" = "Hat die Authentifizierung mehrfach repariert, am Backend gearbeitet und betreut das Projekt.";
 "settings.title" = "Einstellungen";
 "section.language.title" = "Sprache";
+"credits.translators.title" = "Übersetzer";
 "language.english" = "Englisch";
 "language.russian" = "Russisch";
-"language.german" = "Deutsche";
+"language.german" = "Deutsch";
 "language.chineseSimp" = "Chinesisch";
+"language.arabic" = "Arabisch";
+"language.dutch" = "Niederländisch";
+"language.vietnamese" = "Vietnamesisch";
+"language.swedish" = "Schwedisch";
+"language.romanian" = "Rumänisch";
+"language.italian" = "Italienisch";
 
 "action.copyOutput" = "Ausgabe kopieren";
 "action.exportLogs" = "Protokolle exportieren";
