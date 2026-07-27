@@ -53,13 +53,14 @@
 "language.english" = "Engelska";
 "language.russian" = "Ryska";
 "language.german" = "Tyska";
-"language.chineseSimp" = "Kinesiska";
+"language.chineseSimp" = "Kinesiska (förenklad)";
 "language.arabic" = "Arabiska";
 "language.dutch" = "Nederländska";
 "language.vietnamese" = "Vietnamesiska";
 "language.swedish" = "Svenska";
 "language.romanian" = "Rumänska";
 "language.italian" = "Italienska";
+"language.norwegian" = "Norska";
 
 "action.copyOutput" = "Kopiera utdata";
 "action.exportLogs" = "Exportera loggar";

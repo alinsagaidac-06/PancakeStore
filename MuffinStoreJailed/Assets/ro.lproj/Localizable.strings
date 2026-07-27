@@ -53,13 +53,14 @@
 "language.english" = "Engleză";
 "language.russian" = "Rusă";
 "language.german" = "Germană";
-"language.chineseSimp" = "Chineză";
+"language.chineseSimp" = "Chineză simplificată";
 "language.arabic" = "Arabă";
 "language.dutch" = "Olandeză";
 "language.vietnamese" = "Vietnameză";
 "language.swedish" = "Suedeză";
 "language.romanian" = "Română";
 "language.italian" = "Italiană";
+"language.norwegian" = "Norvegiană";
 
 "action.copyOutput" = "Copiază rezultatul";
 "action.exportLogs" = "Exportă jurnalele";

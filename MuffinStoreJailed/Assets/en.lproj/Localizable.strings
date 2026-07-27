@@ -53,13 +53,14 @@
 "language.english" = "English";
 "language.russian" = "Russian";
 "language.german" = "German";
-"language.chineseSimp" = "Chinese";
+"language.chineseSimp" = "Chinese (Simplified)";
 "language.arabic" = "Arabic";
 "language.dutch" = "Dutch";
 "language.vietnamese" = "Vietnamese";
 "language.swedish" = "Swedish";
 "language.romanian" = "Romanian";
 "language.italian" = "Italian";
+"language.norwegian" = "Norwegian";
 
 "action.copyOutput" = "Copy Output";
 "action.exportLogs" = "Export Logs";

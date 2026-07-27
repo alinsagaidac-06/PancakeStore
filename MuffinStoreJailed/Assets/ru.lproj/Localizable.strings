@@ -53,13 +53,14 @@
 "language.english" = "Английский";
 "language.russian" = "Русский";
 "language.german" = "Немецкий";
-"language.chineseSimp" = "Китайский";
+"language.chineseSimp" = "Китайский (упрощённый)";
 "language.arabic" = "Арабский";
 "language.dutch" = "Нидерландский";
 "language.vietnamese" = "Вьетнамский";
 "language.swedish" = "Шведский";
 "language.romanian" = "Румынский";
 "language.italian" = "Итальянский";
+"language.norwegian" = "Норвежский";
 
 "action.copyOutput" = "Копировать вывод";
 "action.exportLogs" = "Экспорт логов";

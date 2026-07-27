@@ -80,7 +80,7 @@ struct SettingsView: View {
                             
                             TranslatorCreditCell(name: "MineTurtlee", languageKey: "language.vietnamese", url: "https://github.com/MineTurtlee")
                             
-                            TranslatorCreditCell(name: "nxtcoreee3", languageKey: "language.swedish, language.romanian", url: "https://github.com/nxtcoreee3")
+                            TranslatorCreditCell(name: "nxtcoreee3", languageKey: "language.swedish, language.romanian, language.norwegian", url: "https://github.com/nxtcoreee3")
                             
                             TranslatorCreditCell(name: "fil", languageKey: "language.italian", url: "https://github.com/tiziodied")
                         }

@@ -58,13 +58,14 @@
 "language.english" = "Tiếng Anh";
 "language.russian" = "Tiếng Nga";
 "language.german" = "Tiếng Đức";
-"language.chineseSimp" = "Tiếng Trung";
+"language.chineseSimp" = "Tiếng Trung (Giản thể)";
 "language.arabic" = "Tiếng Ả Rập";
 "language.dutch" = "Tiếng Hà Lan";
 "language.vietnamese" = "Tiếng Việt";
 "language.swedish" = "Tiếng Thụy Điển";
 "language.romanian" = "Tiếng Romania";
 "language.italian" = "Tiếng Ý";
+"language.norwegian" = "Tiếng Na Uy";
 
 "action.copyOutput" = "Sao chép đầu ra";
 "action.exportLogs" = "Xuất nhật kí";

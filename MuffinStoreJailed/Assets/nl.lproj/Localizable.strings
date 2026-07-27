@@ -58,13 +58,14 @@
 "language.english" = "Engels";
 "language.russian" = "Russisch";
 "language.german" = "Duits";
-"language.chineseSimp" = "Chinees";
+"language.chineseSimp" = "Chinees (vereenvoudigd)";
 "language.arabic" = "Arabisch";
 "language.dutch" = "Nederlands";
 "language.vietnamese" = "Vietnamees";
 "language.swedish" = "Zweeds";
 "language.romanian" = "Roemeens";
 "language.italian" = "Italiaans";
+"language.norwegian" = "Noors";
 
 "action.copyOutput" = "Output Kopiëren";
 "action.exportLogs" = "Logs exporteren";

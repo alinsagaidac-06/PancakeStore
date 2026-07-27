@@ -56,13 +56,14 @@
 "language.english" = "الإنجليزية";
 "language.russian" = "الروسية";
 "language.german" = "الألمانية";
-"language.chineseSimp" = "الصينية";
+"language.chineseSimp" = "الصينية المبسطة";
 "language.arabic" = "العربية";
 "language.dutch" = "الهولندية";
 "language.vietnamese" = "الفيتنامية";
 "language.swedish" = "السويدية";
 "language.romanian" = "الرومانية";
 "language.italian" = "الإيطالية";
+"language.norwegian" = "النرويجية";
 
 "action.copyOutput" = "نسخ المخرجات";
 "action.exportLogs" = "تصدير السجلات";
