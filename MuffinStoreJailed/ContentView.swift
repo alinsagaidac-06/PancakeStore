@@ -282,7 +282,7 @@ struct ContentView: View {
 }
 .sheet(isPresented: $showIPAExporter) {
     if let ipaURL = ipaURL {
-        ShareSheet(items: [ipaURL])
+        DocumentExporter(url: ipaURL)
     }
 }
             .onAppear {
@@ -323,18 +323,18 @@ struct ContentView: View {
     }
 }
 
-struct ShareSheet: UIViewControllerRepresentable {
-    let items: [Any]
+struct DocumentExporter: UIViewControllerRepresentable {
+    let url: URL
 
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(
-            activityItems: items,
-            applicationActivities: nil
+    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
+        UIDocumentPickerViewController(
+            forExporting: [url],
+            asCopy: true
         )
     }
 
     func updateUIViewController(
-        _ uiViewController: UIActivityViewController,
+        _ uiViewController: UIDocumentPickerViewController,
         context: Context
     ) {}
 }
