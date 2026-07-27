@@ -1,22 +1,26 @@
-name: Build IPA
+name: Build Modified PancakeStore
 
 on:
-  push:
-    branches: [ "main" ]
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: macos-15
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Compile
-        run: make
+      - name: Build IPA
+        run: |
+          chmod +x ./ipabuild.sh
+          ./ipabuild.sh
 
-      - name: Upload artifact
+      - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
           name: PancakeStore-Modified
-          path: MuffinStoreJailed.ipa
+          path: PancakeStore.ipa
