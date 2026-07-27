@@ -1,7 +1,7 @@
 "app.name" = "PancakeStore";
 
 "section.logs.title" = "Nhật kí";
-"section.logs.footer" = "Được làm với ❤️ bởi đội ngũ [jailbreak.party](https://jailbreak.party).\n[Tham gia máy chủ Discord của jailbreak.party!](https://jailbreak.party/discord)";
+"section.logs.footer" = "Được làm bằng cả tấm lòng bởi đội ngũ [jailbreak.party](https://jailbreak.party).\n[Tham gia máy chủ Discord của jailbreak.party!](https://jailbreak.party/discord)";
 
 "login.placeholder.appleId" = "Apple ID";
 "login.placeholder.password" = "Mật khẩu";
@@ -40,7 +40,6 @@
 "action.github" = "GitHub";
 "action.website" = "Website";
 "settings.autoClean.title" = "Tự động dọn dep ứng dụng";
-"settings.autoClean.subtitle" = "This is toggled on by default to make sure that PancakeStore doesn't keep any saved data from the app you had downgraded.";
 "settings.autoClean.subtitle" = "Cái này được bật lên theo mặc định để chắc chắn rằng PancakeStore không giữ lại bất kỳ dữ liệu nào còn sót lại từ ứng dụng bạn đã hạ cấp.";
 "action.cleanDocuments" = "Dọn dẹp tài liệu";
 "section.data.title" = "Dữ liệu";
@@ -56,6 +55,7 @@
 "section.language.title" = "Ngôn ngữ";
 "credits.translators.title" = "Người dịch";
 "language.english" = "Tiếng Anh";
+"language.spanish" = "Tiếng Tây Ban Nha";
 "language.russian" = "Tiếng Nga";
 "language.german" = "Tiếng Đức";
 "language.chineseSimp" = "Tiếng Trung (Giản thể)";

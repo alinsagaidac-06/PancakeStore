@@ -13,7 +13,7 @@ var sema = DispatchSemaphore(value: 0)
 var weOnADebugBuild: Bool = false
 let fm = FileManager.default
 
-let appBuild = "Beta 1"
+let appBuild = "Release"
 
 @main
 struct MuffinStoreJailedApp: App {
