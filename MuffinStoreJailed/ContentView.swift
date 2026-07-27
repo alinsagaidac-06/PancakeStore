@@ -21,8 +21,6 @@ final class StoreData: ObservableObject {
 struct ContentView: View {
     @StateObject private var store = StoreData.shared
     @State private var ipaTool: IPATool?
-    @State private var showIPAExporter = false
-    @State private var ipaURL: URL?
     
     @State private var appleId = ""
     @State private var password = ""
@@ -34,6 +32,9 @@ struct ContentView: View {
     
     @State private var shownWelcome = false
     @State private var showSettings = false
+
+    @State private var exportMessage = ""
+    @State private var showExportAlert = false
     
     let device = UIDevice.current
     
@@ -44,58 +45,84 @@ struct ContentView: View {
                     LogView()
                         .modifier(TerminalPlatter())
                 } header: {
-                    HeaderLabel(text: String(localized: "section.logs.title"), icon: "terminal")
+                    HeaderLabel(
+                        text: String(localized: "section.logs.title"),
+                        icon: "terminal"
+                    )
                 } footer: {
                     Text("section.logs.footer")
                 }
 
-                // login stuff
+                // Login
                 if !store.isLoggedIn {
                     Section {
-                        TextField("login.placeholder.appleId", text: $appleId)
-                            .autocorrectionDisabled()
-                            .textInputAutocapitalization(.never)
-                        SecureField("login.placeholder.password", text: $password)
-                            .autocorrectionDisabled()
-                            .textInputAutocapitalization(.never)
+                        TextField(
+                            "login.placeholder.appleId",
+                            text: $appleId
+                        )
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
+
+                        SecureField(
+                            "login.placeholder.password",
+                            text: $password
+                        )
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
                     } header: {
-                        HeaderLabel(text: String(localized: "section.login.title"), icon: "cloud")
+                        HeaderLabel(
+                            text: String(localized: "section.login.title"),
+                            icon: "cloud"
+                        )
                     } footer: {
                         Text("section.login.footer")
                     }
 
                     if store.sent2FA {
                         Section {
-                            TextField("login.placeholder.twoFactor", text: $authCode)
-                                .keyboardType(.numberPad)
-                                .autocorrectionDisabled()
-                                .textInputAutocapitalization(.never)
+                            TextField(
+                                "login.placeholder.twoFactor",
+                                text: $authCode
+                            )
+                            .keyboardType(.numberPad)
+                            .autocorrectionDisabled()
+                            .textInputAutocapitalization(.never)
                         } header: {
-                            HeaderLabel(text: String(localized: "section.verification.title"), icon: "faceid")
+                            HeaderLabel(
+                                text: String(localized: "section.verification.title"),
+                                icon: "faceid"
+                            )
                         }
                     }
                 }
 
-                // on login
+                // După login
                 if store.isLoggedIn && !isDowngrading {
                     Section {
-                        TextField("downgrade.placeholder.link", text: $storeURL)
-                            .autocorrectionDisabled()
-                            .textInputAutocapitalization(.never)
+                        TextField(
+                            "downgrade.placeholder.link",
+                            text: $storeURL
+                        )
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
                     } header: {
-                        HeaderLabel(text: String(localized: "section.downgrade.title"), icon: "arrow.down.app")
+                        HeaderLabel(
+                            text: String(localized: "section.downgrade.title"),
+                            icon: "arrow.down.app"
+                        )
                     } footer: {
                         Text("section.downgrade.footer")
                     }
                 }
 
-                // while downgrading
+                // În timpul downgrade-ului
                 if isDowngrading {
                     Section {
                         if store.hasServedApp {
                             HStack(spacing: 12) {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundStyle(.green)
+
                                 Text("status.downgradeSuccessful")
                             }
                         } else {
@@ -116,7 +143,10 @@ struct ContentView: View {
                                         Button {
                                             UIPasteboard.general.string = storeURL
                                         } label: {
-                                            Label("action.copy", systemImage: "doc.on.doc")
+                                            Label(
+                                                "action.copy",
+                                                systemImage: "doc.on.doc"
+                                            )
                                         }
                                     }
                             }
@@ -131,7 +161,10 @@ struct ContentView: View {
                                         Button {
                                             UIPasteboard.general.string = store.appBID
                                         } label: {
-                                            Label("action.copy", systemImage: "doc.on.doc")
+                                            Label(
+                                                "action.copy",
+                                                systemImage: "doc.on.doc"
+                                            )
                                         }
                                     }
                             }
@@ -145,100 +178,154 @@ struct ContentView: View {
                             }
                         }
                     } header: {
-                        HeaderLabel(text: String(localized: "section.appInfo.title"), icon: "info.circle")
+                        HeaderLabel(
+                            text: String(localized: "section.appInfo.title"),
+                            icon: "info.circle"
+                        )
                     }
                 }
             }
             .navigationTitle("app.name")
             .scrollDismissesKeyboard(.interactively)
+
             .safeAreaInset(edge: .bottom) {
                 Group {
+                    // Login
                     if !store.isLoggedIn && !store.sent2FA {
                         Button {
-                            ipaTool = IPATool(appleId: appleId, password: password)
-                            let _ = ipaTool?.authenticate(requestCode: true)
+                            ipaTool = IPATool(
+                                appleId: appleId,
+                                password: password
+                            )
+
+                            let _ = ipaTool?.authenticate(
+                                requestCode: true
+                            )
                         } label: {
-                            ButtonLabel(text: String(localized: "action.continue"), icon: "arrow.right")
+                            ButtonLabel(
+                                text: String(localized: "action.continue"),
+                                icon: "arrow.right"
+                            )
                         }
                         .buttonStyle(FancyButtonStyle())
-                        .disabled(appleId.isEmpty || password.isEmpty)
+                        .disabled(
+                            appleId.isEmpty ||
+                            password.isEmpty
+                        )
                     }
                     
+                    // 2FA
                     if !store.isLoggedIn && store.sent2FA {
                         Button {
                             let finalPassword = password + authCode
-                            ipaTool = IPATool(appleId: appleId, password: finalPassword)
+
+                            ipaTool = IPATool(
+                                appleId: appleId,
+                                password: finalPassword
+                            )
+
                             let _ = ipaTool?.authenticate()
                         } label: {
-                            ButtonLabel(text: String(localized: "action.logIn"), icon: "arrow.right")
+                            ButtonLabel(
+                                text: String(localized: "action.logIn"),
+                                icon: "arrow.right"
+                            )
                         }
                         .buttonStyle(FancyButtonStyle())
                         .disabled(authCode.isEmpty)
                     }
                     
+                    // Downgrade
                     if store.isLoggedIn && !isDowngrading {
                         Button {
                             var appLinkParsed = storeURL
-                            appLinkParsed = appLinkParsed.components(separatedBy: "id").last ?? ""
+
+                            appLinkParsed = appLinkParsed
+                                .components(separatedBy: "id")
+                                .last ?? ""
                             
                             for char in appLinkParsed {
                                 if !char.isNumber {
-                                    appLinkParsed = String(appLinkParsed.prefix(upTo: appLinkParsed.firstIndex(of: char)!))
+                                    appLinkParsed = String(
+                                        appLinkParsed.prefix(
+                                            upTo: appLinkParsed.firstIndex(
+                                                of: char
+                                            )!
+                                        )
+                                    )
+
                                     break
                                 }
                             }
                             
                             print("App ID: \(appLinkParsed)")
+
                             isDowngrading = true
                             
-                            isDowngrading = downgradeApp(appId: appLinkParsed, ipaTool: ipaTool!)
+                            isDowngrading = downgradeApp(
+                                appId: appLinkParsed,
+                                ipaTool: ipaTool!
+                            )
                         } label: {
-                            ButtonLabel(text: String(localized: "action.downgradeApp"), icon: "arrow.down")
+                            ButtonLabel(
+                                text: String(localized: "action.downgradeApp"),
+                                icon: "arrow.down"
+                            )
                         }
                         .buttonStyle(FancyButtonStyle())
                         .disabled(storeURL.isEmpty)
                     }
                     
+                    // După downgrade
                     if isDowngrading {
-    VStack {
-        Button {
-            LSApplicationWorkspace.default().openApplication(withBundleID: store.appBID)
-        } label: {
-            ButtonLabel(
-                text: String(localized: "action.openApp"),
-                icon: "arrow.up.right.square"
-            )
-        }
-        .buttonStyle(FancyButtonStyle())
-        .disabled(!store.hasServedApp)
+                        VStack {
+                            // Open App
+                            Button {
+                                LSApplicationWorkspace
+                                    .default()
+                                    .openApplication(
+                                        withBundleID: store.appBID
+                                    )
+                            } label: {
+                                ButtonLabel(
+                                    text: String(localized: "action.openApp"),
+                                    icon: "arrow.up.right.square"
+                                )
+                            }
+                            .buttonStyle(FancyButtonStyle())
+                            .disabled(!store.hasServedApp)
 
-        Button {
-            let url = FileManager.default.temporaryDirectory
-                .appendingPathComponent("app.ipa")
-
-            if FileManager.default.fileExists(atPath: url.path) {
-                ipaURL = url
-                showIPAExporter = true
-            }
-        } label: {
-            ButtonLabel(
-                text: "Export IPA",
-                icon: "square.and.arrow.up"
-            )
-        }
-        .buttonStyle(FancyButtonStyle())
-        .disabled(!store.hasServedApp)
-    }
-}
+                            // EXPORT IPA
+                            Button {
+                                exportIPA()
+                            } label: {
+                                ButtonLabel(
+                                    text: "Export IPA",
+                                    icon: "square.and.arrow.down"
+                                )
+                            }
+                            .buttonStyle(FancyButtonStyle())
+                            .disabled(!store.hasServedApp)
+                        }
+                    }
                 }
                 .modifier(OverlayBackground())
             }
+
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Menu {
                         if store.isLoggedIn {
                             Button(action: {}) {
-                                Text(verbatim: String(format: String(localized: "menu.signedInAs"), accountName))
+                                Text(
+                                    verbatim: String(
+                                        format: String(
+                                            localized: "menu.signedInAs"
+                                        ),
+                                        accountName
+                                    )
+                                )
+
                                 Text("\(appleId)")
                             }
                         } else {
@@ -250,20 +337,34 @@ struct ContentView: View {
 
                         Button(role: .destructive) {
                             Alertinator.shared.alert(
-                                title: String(localized: "alert.signOut.title"),
-                                body: String(localized: "alert.signOut.message"),
-                                actionLabel: String(localized: "action.signOutConfirm"),
+                                title: String(
+                                    localized: "alert.signOut.title"
+                                ),
+                                body: String(
+                                    localized: "alert.signOut.message"
+                                ),
+                                actionLabel: String(
+                                    localized: "action.signOutConfirm"
+                                ),
                                 action: {
                                     EncryptedKeychainWrapper.nuke()
                                     EncryptedKeychainWrapper.generateAndStoreKey()
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+
+                                    DispatchQueue.main.asyncAfter(
+                                        deadline: .now() + 1.5
+                                    ) {
                                         exitinator()
                                     }
-                                })
+                                }
+                            )
                         } label: {
-                            Label("action.signOut", systemImage: "person.fill.xmark")
+                            Label(
+                                "action.signOut",
+                                systemImage: "person.fill.xmark"
+                            )
                         }
                         .disabled(!store.isLoggedIn)
+
                     } label: {
                         Image(systemName: "person")
                     }
@@ -277,74 +378,208 @@ struct ContentView: View {
                     }
                 }
             }
+
             .sheet(isPresented: $showSettings) {
-    SettingsView()
-}
-.sheet(isPresented: $showIPAExporter) {
-    if let ipaURL = ipaURL {
-        DocumentExporter(url: ipaURL)
-    }
-}
+                SettingsView()
+            }
+
+            .alert(
+                "Export IPA",
+                isPresented: $showExportAlert
+            ) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(exportMessage)
+            }
+
             .onAppear {
-                print("\n[*] PancakeStore v\(AppInfo.appVersion) (\(appBuild))")
-                print("[*] Running on \(device.systemName) \(device.systemVersion), \(machineName()).")
-                store.isLoggedIn = EncryptedKeychainWrapper.hasAuthInfo()
-                print(store.isLoggedIn ? "Found auth info in keychain" : "Found no auth info in keychain")
+                print(
+                    "\n[*] PancakeStore v\(AppInfo.appVersion) (\(appBuild))"
+                )
+
+                print(
+                    "[*] Running on \(device.systemName) \(device.systemVersion), \(machineName())."
+                )
+
+                store.isLoggedIn =
+                    EncryptedKeychainWrapper.hasAuthInfo()
+
+                print(
+                    store.isLoggedIn
+                    ? "Found auth info in keychain"
+                    : "Found no auth info in keychain"
+                )
 
                 if store.isLoggedIn {
-                    guard let authInfo = EncryptedKeychainWrapper.getAuthInfo() else {
-                        print("Failed to get auth info from keychain, logging out")
+                    guard let authInfo =
+                            EncryptedKeychainWrapper.getAuthInfo()
+                    else {
+                        print(
+                            "Failed to get auth info from keychain, logging out"
+                        )
+
                         store.isLoggedIn = false
+
                         EncryptedKeychainWrapper.nuke()
                         EncryptedKeychainWrapper.generateAndStoreKey()
+
                         return
                     }
 
-                    appleId = authInfo["appleId"]! as! String
-                    password = authInfo["password"]! as! String
-                    accountName = authInfo["accountName"]! as! String
+                    appleId =
+                        authInfo["appleId"]! as! String
 
-                    ipaTool = IPATool(appleId: appleId, password: password)
+                    password =
+                        authInfo["password"]! as! String
+
+                    accountName =
+                        authInfo["accountName"]! as! String
+
+                    ipaTool = IPATool(
+                        appleId: appleId,
+                        password: password
+                    )
+
                     let result = ipaTool?.authenticate()
-                    print(result ?? false ? "Re-authenticated successfully" : "Re-authenticated unsuccessfully")
+
+                    print(
+                        result ?? false
+                        ? "Re-authenticated successfully"
+                        : "Re-authenticated unsuccessfully"
+                    )
                 } else {
-                    print("No auth info found in keychain, setting up by generating a key in SEP")
+                    print(
+                        "No auth info found in keychain, setting up by generating a key in SEP"
+                    )
+
                     EncryptedKeychainWrapper.generateAndStoreKey()
                 }
             }
+
             .onOpenURL { schemedURL in
-                let rawURL = schemedURL.absoluteString.replacingOccurrences(of: "pancakestore:", with: "")
+                let rawURL = schemedURL.absoluteString
+                    .replacingOccurrences(
+                        of: "pancakestore:",
+                        with: ""
+                    )
+
                 if let appLink = rawURL.removingPercentEncoding {
                     storeURL = appLink
-                    print("Successfully received app link! \(appLink)")
+
+                    print(
+                        "Successfully received app link! \(appLink)"
+                    )
                 }
             }
         }
     }
-}
 
-struct DocumentExporter: UIViewControllerRepresentable {
-    let url: URL
+    // MARK: - IPA EXPORT
 
-    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
-        UIDocumentPickerViewController(
-            forExporting: [url],
-            asCopy: true
-        )
+    private func exportIPA() {
+        let fm = FileManager.default
+
+        let source = fm.temporaryDirectory
+            .appendingPathComponent("app.ipa")
+
+        guard fm.fileExists(atPath: source.path) else {
+            print(
+                "❌ app.ipa NU există la: \(source.path)"
+            )
+
+            exportMessage =
+                "Nu am găsit app.ipa. Fă downgrade-ul din nou și încearcă imediat după instalare."
+
+            showExportAlert = true
+            return
+        }
+
+        do {
+            let documents = fm.urls(
+                for: .documentDirectory,
+                in: .userDomainMask
+            )[0]
+
+            let exportsFolder = documents
+                .appendingPathComponent(
+                    "Exports",
+                    isDirectory: true
+                )
+
+            try fm.createDirectory(
+                at: exportsFolder,
+                withIntermediateDirectories: true
+            )
+
+            let safeVersion = store.appVersion.isEmpty
+                ? "Unknown"
+                : store.appVersion
+
+            let destination = exportsFolder
+                .appendingPathComponent(
+                    "App-\(safeVersion).ipa"
+                )
+
+            if fm.fileExists(
+                atPath: destination.path
+            ) {
+                try fm.removeItem(
+                    at: destination
+                )
+            }
+
+            try fm.copyItem(
+                at: source,
+                to: destination
+            )
+
+            print(
+                "✅ IPA SALVAT: \(destination.path)"
+            )
+
+            exportMessage =
+                "IPA salvat cu succes în folderul Exports."
+
+            showExportAlert = true
+
+        } catch {
+            print(
+                "❌ Eroare export IPA: \(error)"
+            )
+
+            exportMessage =
+                "Eroare la salvare: \(error.localizedDescription)"
+
+            showExportAlert = true
+        }
     }
-
-    func updateUIViewController(
-        _ uiViewController: UIDocumentPickerViewController,
-        context: Context
-    ) {}
 }
+
 func machineName() -> String {
     var systemInfo = utsname()
+
     uname(&systemInfo)
-    let machineMirror = Mirror(reflecting: systemInfo.machine)
-    return machineMirror.children.reduce("") { identifier, element in
-        guard let value = element.value as? Int8, value != 0 else { return identifier }
-        return identifier + String(UnicodeScalar(UInt8(value)))
+
+    let machineMirror =
+        Mirror(reflecting: systemInfo.machine)
+
+    return machineMirror.children.reduce("") {
+        identifier,
+        element in
+
+        guard
+            let value = element.value as? Int8,
+            value != 0
+        else {
+            return identifier
+        }
+
+        return identifier +
+            String(
+                UnicodeScalar(
+                    UInt8(value)
+                )
+            )
     }
 }
 
