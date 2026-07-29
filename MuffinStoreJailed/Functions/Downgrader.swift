@@ -33,10 +33,10 @@ func downgradeAppToVersion(appId: String, versionId: String, ipaTool: IPATool) {
     let tempDir = fm.temporaryDirectory
     let contents = try! fm.contentsOfDirectory(atPath: path)
     print("Contents: \(contents)")
-    // also delete this; i wanna see both the app's directory and the temp ipa GONE.
+
+    // Locate the downloaded .app before repacking so an optional local
+    // configuration file can be injected for the Free Fire 1.69 test.
     let destinationUrl = tempDir.appendingPathComponent("app.ipa")
-    try! Zip.zipFiles(paths: contents.map { URL(fileURLWithPath: path).appendingPathComponent($0) }, zipFilePath: destinationUrl, password: nil, progress: nil)
-    print("IPA zipped to \(destinationUrl.path)")
     let path2 = URL(fileURLWithPath: path)
     var appDir = path2.appendingPathComponent("Payload")
     for file in try! fm.contentsOfDirectory(atPath: appDir.path) {
@@ -53,6 +53,48 @@ func downgradeAppToVersion(appId: String, versionId: String, ipaTool: IPATool) {
     let appVersion = infoPlist["CFBundleShortVersionString"] as! String
     print("appBundleId: \(appBundleId)")
     print("appVersion: \(appVersion)")
+
+    // Experimental Free Fire 1.69 local backend configuration.
+    // This is intentionally limited to the expected Free Fire bundle id.
+    if appBundleId == "com.dts.freefireth" && appVersion == "1.69.1" {
+        let backendURL = "http://192.168.100.122:8765/live/"
+        let localConfigData = try! JSONSerialization.data(
+            withJSONObject: ["verAddr": backendURL],
+            options: []
+        )
+
+        let candidateDirectories = [
+            appDir,
+            appDir.appendingPathComponent("Data"),
+            appDir.appendingPathComponent("Data/Raw"),
+            appDir.appendingPathComponent("Data/Raw/ios")
+        ]
+
+        for directory in candidateDirectories {
+            try? fm.createDirectory(
+                at: directory,
+                withIntermediateDirectories: true,
+                attributes: nil
+            )
+            let configURL = directory.appendingPathComponent("localConfig.json")
+            try! localConfigData.write(to: configURL, options: .atomic)
+            print("[FF169] Injected localConfig: \(configURL.path)")
+        }
+
+        print("[FF169] Backend URL: \(backendURL)")
+    }
+
+    // Repack only after the optional injection above.
+    if fm.fileExists(atPath: destinationUrl.path) {
+        try? fm.removeItem(at: destinationUrl)
+    }
+    try! Zip.zipFiles(
+        paths: contents.map { URL(fileURLWithPath: path).appendingPathComponent($0) },
+        zipFilePath: destinationUrl,
+        password: nil,
+        progress: nil
+    )
+    print("IPA zipped to \(destinationUrl.path)")
 
     data.appBID = appBundleId
     data.appVersion = appVersion
